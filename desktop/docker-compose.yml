@@ -232,6 +232,8 @@ services:
     build: ./gpu-stack/webhook
     container_name: webhook-gpu
     restart: unless-stopped
+    privileged: true
+    pid: host
     ports:
       - "5000:5000"
     volumes:
