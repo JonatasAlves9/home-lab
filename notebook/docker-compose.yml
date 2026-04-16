@@ -156,6 +156,19 @@ services:
       - npm_letsencrypt:/etc/letsencrypt
 
   # ---------------------------------------------------------------------------
+  # WoL — Endpoint HTTP para ligar o Desktop via Wake on LAN
+  # Acesso: http://<ip>:5001/wol/start  |  /wol/status  |  /health
+  # ---------------------------------------------------------------------------
+  wol:
+    build: ./wol
+    container_name: wol
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      DESKTOP_MAC: ${DESKTOP_MAC}
+      DESKTOP_IP: ${DESKTOP_IP}
+
+  # ---------------------------------------------------------------------------
   # Tailscale — VPN mesh para acesso seguro de qualquer lugar
   # Após subir: docker exec tailscale tailscale up --authkey=$TS_AUTHKEY
   # ---------------------------------------------------------------------------

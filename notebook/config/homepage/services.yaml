@@ -67,6 +67,19 @@
 # Grupo 2: Serviços do Desktop — ligado sob demanda via Wake on LAN
 # -----------------------------------------------------------------------------
 - Desktop — Sob Demanda:
+    - Ligar Desktop:
+        href: "http://{{HOMEPAGE_VAR_NOTEBOOK_IP}}:5001/wol/start"
+        description: Liga o Desktop via Wake on LAN
+        icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/proxmox.png
+        widget:
+          type: customapi
+          url: "http://{{HOMEPAGE_VAR_NOTEBOOK_IP}}:5001/wol/status"
+          refreshInterval: 30000
+          method: GET
+          mappings:
+            - field: online
+              label: Online
+
     - Jellyfin:
         href: "http://{{HOMEPAGE_VAR_DESKTOP_IP}}:8096"
         description: Servidor de mídia (filmes e séries)
