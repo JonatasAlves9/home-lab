@@ -42,8 +42,8 @@ services:
       - "8989:8989"
     volumes:
       - sonarr_config:/config
-      - /mnt/hd-externo/series:/tv
-      - /mnt/hd-externo/downloads:/downloads
+      - ~/media/series:/tv
+      - ~/media/downloads:/downloads
     environment:
       PUID: ${PUID:-1000}
       PGID: ${PGID:-1000}
@@ -61,8 +61,8 @@ services:
       - "7878:7878"
     volumes:
       - radarr_config:/config
-      - /mnt/hd-externo/filmes:/movies
-      - /mnt/hd-externo/downloads:/downloads
+      - ~/media/filmes:/movies
+      - ~/media/downloads:/downloads
     environment:
       PUID: ${PUID:-1000}
       PGID: ${PGID:-1000}
@@ -81,7 +81,7 @@ services:
       - "8090:8080"
     volumes:
       - qbit_config:/config
-      - /mnt/hd-externo/downloads:/downloads
+      - ~/media/downloads:/downloads
     environment:
       PUID: ${PUID:-1000}
       PGID: ${PGID:-1000}
