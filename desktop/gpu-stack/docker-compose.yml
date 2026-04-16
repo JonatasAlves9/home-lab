@@ -40,9 +40,8 @@ services:
       # Dispositivos de renderização (podem ser múltiplos: renderD128, renderD129...)
       - /dev/dri:/dev/dri
     group_add:
-      # Grupos necessários para acesso à GPU AMD
-      - video
-      - render
+      - "993"
+      - "44"
     volumes:
       # Modelos baixados ficam persistidos aqui
       - ollama_data:/root/.ollama
