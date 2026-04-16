@@ -22,9 +22,8 @@ services:
       - "8096:8096"
     volumes:
       - jellyfin_config:/config
-      # Ajuste os caminhos conforme o ponto de montagem do seu HD externo
-      - /mnt/hd-externo/filmes:/media/filmes
-      - /mnt/hd-externo/series:/media/series
+      - ~/media/filmes:/media/filmes
+      - ~/media/series:/media/series
     devices:
       # Permite transcoding via GPU AMD (VA-API)
       - /dev/dri:/dev/dri
