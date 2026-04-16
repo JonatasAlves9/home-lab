@@ -23,6 +23,8 @@ services:
       - ./config/homepage:/app/config
       # Acesso ao Docker socket para exibir status dos containers no dashboard
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      # Imagens usadas no dashboard (ícones, background, etc.)
+      - ./config/homepage/images:/app/public/images
     environment:
       # IPs usados nos widgets do homepage — ajuste conforme sua rede
       HOMEPAGE_VAR_NOTEBOOK_IP: ${NOTEBOOK_IP:-localhost}
