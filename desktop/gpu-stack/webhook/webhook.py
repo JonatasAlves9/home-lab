@@ -49,7 +49,7 @@ def gpu_stop():
         )
         # Agenda o desligamento do sistema (não bloqueante)
         subprocess.Popen(
-            ["sudo", "shutdown", "now"],
+            ["shutdown", "-h", "now"],
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
         )

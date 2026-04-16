@@ -154,9 +154,9 @@
     - Ligar GPU:
         href: "http://{{HOMEPAGE_VAR_DESKTOP_IP}}:5000/gpu/start"
         description: Inicia Ollama + Open WebUI
-        icon: play.png
+        icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/ollama.png
 
     - Desligar GPU:
         href: "http://{{HOMEPAGE_VAR_DESKTOP_IP}}:5000/gpu/stop"
         description: Desliga GPU Stack e o Desktop
-        icon: stop.png
+        icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/portainer.png
