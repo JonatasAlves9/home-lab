@@ -205,6 +205,25 @@ services:
       TZ: ${TZ:-America/Recife}
 
   # ---------------------------------------------------------------------------
+  # Tailscale — VPN mesh para acesso remoto seguro ao Desktop
+  # Após subir: docker exec tailscale tailscale up --authkey=$TS_AUTHKEY
+  # ---------------------------------------------------------------------------
+  tailscale:
+    image: tailscale/tailscale:latest
+    container_name: tailscale
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - tailscale_data:/var/lib/tailscale
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    environment:
+      TS_AUTHKEY: ${TS_AUTHKEY}
+      TS_STATE_DIR: /var/lib/tailscale
+
+  # ---------------------------------------------------------------------------
   # Webhook GPU — Controla o GPU Stack via HTTP (subir/derrubar Ollama e WebUI)
   # Acesso: http://<ip>:5000
   # Endpoints: /gpu/start, /gpu/stop, /status, /health
@@ -234,3 +253,4 @@ volumes:
   n8n_data:
   prowlarr_config:
   bazarr_config:
+  tailscale_data:

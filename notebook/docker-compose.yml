@@ -142,6 +142,23 @@ services:
       TZ: America/Recife
 
   # ---------------------------------------------------------------------------
+  # Nginx Proxy Manager — Reverse proxy com interface web e SSL automático
+  # Painel: http://<ip>:81  |  Login padrão: admin@example.com / changeme
+  # HTTP: 80, HTTPS: 443, Painel: 81
+  # ---------------------------------------------------------------------------
+  nginx-proxy-manager:
+    image: jc21/nginx-proxy-manager:latest
+    container_name: nginx-proxy-manager
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "81:81"
+    volumes:
+      - npm_data:/data
+      - npm_letsencrypt:/etc/letsencrypt
+
+  # ---------------------------------------------------------------------------
   # Tailscale — VPN mesh para acesso seguro de qualquer lugar
   # Após subir: docker exec tailscale tailscale up --authkey=$TS_AUTHKEY
   # ---------------------------------------------------------------------------
@@ -172,3 +189,5 @@ volumes:
   uptime_data:
   freshrss_data:
   tailscale_data:
+  npm_data:
+  npm_letsencrypt:
