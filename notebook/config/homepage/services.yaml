@@ -23,7 +23,7 @@
         href: "http://{{HOMEPAGE_VAR_NOTEBOOK_IP}}:3001"
         description: Servidor Git self-hosted
         icon: gitea.png
-        # widget:
+        # widget:FreshRSS
         #   type: gitea
         #   url: "http://{{HOMEPAGE_VAR_NOTEBOOK_IP}}:3001"
         #   # Gere um token em: Gitea > Configurações > Aplicativos
@@ -57,11 +57,11 @@
         href: "http://{{HOMEPAGE_VAR_NOTEBOOK_IP}}:8083"
         description: Agregador de feeds RSS
         icon: freshrss.png
-        widget:
-          type: freshrss
-          url: "http://{{HOMEPAGE_VAR_NOTEBOOK_IP}}:8083"
-          username: "{{HOMEPAGE_VAR_FRESHRSS_USER}}"
-          password: "{{HOMEPAGE_VAR_FRESHRSS_PASS}}"
+        # widget:
+        #   type: freshrss
+        #   url: "http://{{HOMEPAGE_VAR_NOTEBOOK_IP}}:8083"
+        #   username: "{{HOMEPAGE_VAR_FRESHRSS_USER}}"
+        #   password: "{{HOMEPAGE_VAR_FRESHRSS_PASS}}"
 
 # -----------------------------------------------------------------------------
 # Grupo 2: Serviços do Desktop — ligado sob demanda via Wake on LAN
