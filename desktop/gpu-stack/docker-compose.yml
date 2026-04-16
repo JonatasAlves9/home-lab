@@ -28,30 +28,26 @@ services:
   #   docker exec ollama ollama list
   # ---------------------------------------------------------------------------
   ollama:
-    image: ollama/ollama:rocm
+    # Usa imagem padrão (não ROCm) para rodar com backend Vulkan
+    # RX 5500 XT (gfx1012/Navi 14) não tem VMM — ROCm causa memory access fault
+    # Vulkan não depende de VMM e funciona bem com GPUs AMD modernas
+    image: ollama/ollama:latest
     container_name: ollama
     # Não reinicia automaticamente — sobe apenas quando solicitado
     restart: "no"
     ports:
       - "11434:11434"
     devices:
-      # Dispositivo de compute da GPU AMD (necessário para ROCm)
-      - /dev/kfd:/dev/kfd
-      # Dispositivos de renderização (podem ser múltiplos: renderD128, renderD129...)
+      # Dispositivos de renderização para Vulkan (não precisa de /dev/kfd)
       - /dev/dri:/dev/dri
     group_add:
-      - "993"
       - "44"
     volumes:
       # Modelos baixados ficam persistidos aqui
       - ollama_data:/root/.ollama
     environment:
-      # Força o uso da GPU AMD via ROCm
-      HSA_OVERRIDE_GFX_VERSION: "10.3.0"
-      # Desabilita SDMA — corrige memory access fault em GPUs Navi 1x (RX 5500 XT)
-      HSA_ENABLE_SDMA: "0"
-      # Habilita Unified Memory Access — necessário em GPUs sem VMM (RX 5500 XT)
-      GGML_HIP_UMA: "1"
+      # Usa backend Vulkan em vez de ROCm — contorna limitações de VMM da RX 5500 XT
+      OLLAMA_VULKAN: "1"
 
   # ---------------------------------------------------------------------------
   # Open WebUI — Interface web amigável para conversar com modelos Ollama
