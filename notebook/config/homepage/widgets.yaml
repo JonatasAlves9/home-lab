@@ -1,0 +1,40 @@
+# =============================================================================
+# Homepage — Widgets Globais
+# Exibidos no topo do dashboard, acima dos grupos de serviços
+# Docs: https://gethomepage.dev/latest/widgets/
+# =============================================================================
+
+# Relógio e data no fuso horário local (pt-BR)
+- datetime:
+    text_size: xl
+    format:
+      # Formato: "terça-feira, 15 de abril de 2025 • 14:32"
+      timeStyle: short
+      dateStyle: full
+      locale: pt-BR
+
+# Clima via Open-Meteo (sem necessidade de API key)
+# Ajuste latitude/longitude para sua cidade
+- openmeteo:
+    label: Recife
+    latitude: -8.0476
+    longitude: -34.8770
+    units: metric
+    cache: 5  # minutos de cache para não sobrecarregar a API
+
+# Barra de busca
+- search:
+    provider: duckduckgo
+    target: _blank
+    focus: true
+
+# Informações de recursos do sistema do Notebook
+- resources:
+    cpu: true
+    memory: true
+    disk:
+      - /
+      - /mnt/dados
+    # Atualiza a cada 5 segundos
+    refresh: 5000
+    diskUnits: bytes

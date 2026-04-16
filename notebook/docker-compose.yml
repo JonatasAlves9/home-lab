@@ -1,0 +1,168 @@
+version: "3.8"
+
+# =============================================================================
+# Notebook — Serviços 24/7
+# Todos os serviços sobem automaticamente com o Docker (restart: unless-stopped)
+# Execute: docker compose up -d
+# =============================================================================
+
+services:
+
+  # ---------------------------------------------------------------------------
+  # Homepage — Dashboard centralizado com links para todos os serviços
+  # Acesso: http://<ip>:3000
+  # ---------------------------------------------------------------------------
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: homepage
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      # Configurações do dashboard (services.yaml, widgets.yaml, settings.yaml)
+      - ./config/homepage:/app/config
+      # Acesso ao Docker socket para exibir status dos containers no dashboard
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      # IPs usados nos widgets do homepage — ajuste conforme sua rede
+      HOMEPAGE_VAR_NOTEBOOK_IP: ${NOTEBOOK_IP:-localhost}
+      HOMEPAGE_VAR_DESKTOP_IP: ${DESKTOP_IP:-192.168.1.X}
+      HOMEPAGE_VAR_JELLYFIN_KEY: ${JELLYFIN_KEY:-}
+      HOMEPAGE_VAR_SONARR_KEY: ${SONARR_KEY:-}
+      HOMEPAGE_VAR_RADARR_KEY: ${RADARR_KEY:-}
+      HOMEPAGE_VAR_NEXTCLOUD_USER: ${NEXTCLOUD_ADMIN_USER:-admin}
+      HOMEPAGE_VAR_NEXTCLOUD_PASS: ${NEXTCLOUD_ADMIN_PASSWORD:-}
+      HOMEPAGE_VAR_PIHOLE_KEY: ${PIHOLE_KEY:-}
+      HOMEPAGE_VAR_UPTIME_KEY: ${UPTIME_KEY:-}
+
+  # ---------------------------------------------------------------------------
+  # Nextcloud — Armazenamento pessoal em nuvem
+  # Acesso: http://<ip>:8080
+  # Credenciais definidas nas variáveis NEXTCLOUD_ADMIN_USER/PASSWORD
+  # ---------------------------------------------------------------------------
+  nextcloud:
+    image: nextcloud:latest
+    container_name: nextcloud
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      # Dados do Nextcloud (arquivos, banco SQLite, apps)
+      - nextcloud_data:/var/www/html
+      # Ponto de montagem para dados externos (HD externo, NFS, etc.)
+      - /mnt/dados:/mnt/dados
+    environment:
+      NEXTCLOUD_ADMIN_USER: ${NEXTCLOUD_ADMIN_USER}
+      NEXTCLOUD_ADMIN_PASSWORD: ${NEXTCLOUD_ADMIN_PASSWORD}
+
+  # ---------------------------------------------------------------------------
+  # Gitea — Servidor Git self-hosted, alternativa leve ao GitHub/GitLab
+  # Acesso web: http://<ip>:3001
+  # SSH para repositórios: ssh://git@<ip>:222
+  # ---------------------------------------------------------------------------
+  gitea:
+    image: gitea/gitea:latest
+    container_name: gitea
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+      - "222:22"
+    volumes:
+      - gitea_data:/data
+
+  # ---------------------------------------------------------------------------
+  # Vaultwarden — Gerenciador de senhas compatível com Bitwarden
+  # Acesso: http://<ip>:8081
+  # Configure o admin token em ADMIN_TOKEN se quiser painel administrativo
+  # ---------------------------------------------------------------------------
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    volumes:
+      - vaultwarden_data:/data
+
+  # ---------------------------------------------------------------------------
+  # Pi-hole — Bloqueio de anúncios em nível de rede via DNS
+  # Interface web: http://<ip>:8082/admin
+  # DNS: aponte os dispositivos da rede para o IP do Notebook na porta 53
+  # ---------------------------------------------------------------------------
+  pihole:
+    image: pihole/pihole:latest
+    container_name: pihole
+    restart: unless-stopped
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "8082:80"
+    environment:
+      WEBPASSWORD: ${PIHOLE_PASSWORD}
+      TZ: America/Recife
+    volumes:
+      - pihole_data:/etc/pihole
+    # Necessário para funcionar como servidor DNS
+    cap_add:
+      - NET_ADMIN
+
+  # ---------------------------------------------------------------------------
+  # Uptime Kuma — Monitor de disponibilidade para todos os serviços
+  # Acesso: http://<ip>:3002
+  # Configure os monitores pela interface web na primeira execução
+  # ---------------------------------------------------------------------------
+  uptime-kuma:
+    image: louislam/uptime-kuma:latest
+    container_name: uptime-kuma
+    restart: unless-stopped
+    ports:
+      - "3002:3001"
+    volumes:
+      - uptime_data:/app/data
+
+  # ---------------------------------------------------------------------------
+  # FreshRSS — Agregador de feeds RSS self-hosted
+  # Acesso: http://<ip>:8083
+  # ---------------------------------------------------------------------------
+  freshrss:
+    image: freshrss/freshrss:latest
+    container_name: freshrss
+    restart: unless-stopped
+    ports:
+      - "8083:80"
+    volumes:
+      - freshrss_data:/var/www/FreshRSS/data
+    environment:
+      TZ: America/Recife
+
+  # ---------------------------------------------------------------------------
+  # Tailscale — VPN mesh para acesso seguro de qualquer lugar
+  # Após subir: docker exec tailscale tailscale up --authkey=$TS_AUTHKEY
+  # ---------------------------------------------------------------------------
+  tailscale:
+    image: tailscale/tailscale:latest
+    container_name: tailscale
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - tailscale_data:/var/lib/tailscale
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    environment:
+      TS_AUTHKEY: ${TS_AUTHKEY}
+      TS_STATE_DIR: /var/lib/tailscale
+
+# =============================================================================
+# Volumes nomeados — dados persistentes gerenciados pelo Docker
+# Para inspecionar: docker volume inspect <nome>
+# =============================================================================
+volumes:
+  nextcloud_data:
+  gitea_data:
+  vaultwarden_data:
+  pihole_data:
+  uptime_data:
+  freshrss_data:
+  tailscale_data:

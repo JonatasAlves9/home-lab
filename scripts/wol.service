@@ -1,0 +1,34 @@
+# =============================================================================
+# wol.service — Serviço systemd para habilitar Wake on LAN permanentemente
+#
+# IMPORTANTE: Substitua "enp3s0" pelo nome correto da sua interface de rede.
+# Para descobrir o nome: ip link show
+# Interfaces comuns: enp3s0, eno1, eth0, enp2s0
+#
+# Instalação (feita automaticamente pelo setup-desktop.sh):
+#   sudo cp wol.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable wol.service
+#   sudo systemctl start wol.service
+#
+# Verificar status:
+#   systemctl status wol.service
+# =============================================================================
+
+[Unit]
+Description=Habilitar Wake on LAN
+# Substitua enp3s0 pelo nome da sua interface (use: ip link show)
+After=network.target
+
+[Service]
+Type=oneshot
+
+# Habilita o WoL com pacote Magic Packet (opção 'g')
+# Substitua enp3s0 pelo nome da sua interface de rede principal
+ExecStart=/sbin/ethtool -s enp3s0 wol g
+
+# O serviço "permanece ativo" mesmo sendo oneshot
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

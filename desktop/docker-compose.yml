@@ -1,0 +1,197 @@
+version: "3.8"
+
+# =============================================================================
+# Desktop — Serviços Sob Demanda
+# Este nó é ligado via Wake on LAN quando necessário
+# Execute: docker compose up -d
+# O GPU Stack está em ./gpu-stack/docker-compose.yml e NÃO sobe automaticamente
+# =============================================================================
+
+services:
+
+  # ---------------------------------------------------------------------------
+  # Jellyfin — Servidor de mídia para filmes e séries
+  # Acesso: http://<ip>:8096
+  # Suporte a transcoding via GPU AMD (device /dev/dri)
+  # ---------------------------------------------------------------------------
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    restart: unless-stopped
+    ports:
+      - "8096:8096"
+    volumes:
+      - jellyfin_config:/config
+      # Ajuste os caminhos conforme o ponto de montagem do seu HD externo
+      - /mnt/hd-externo/filmes:/media/filmes
+      - /mnt/hd-externo/series:/media/series
+    devices:
+      # Permite transcoding via GPU AMD (VA-API)
+      - /dev/dri:/dev/dri
+    environment:
+      TZ: ${TZ:-America/Recife}
+
+  # ---------------------------------------------------------------------------
+  # Sonarr — Automação de download e organização de séries de TV
+  # Acesso: http://<ip>:8989
+  # ---------------------------------------------------------------------------
+  sonarr:
+    image: linuxserver/sonarr:latest
+    container_name: sonarr
+    restart: unless-stopped
+    ports:
+      - "8989:8989"
+    volumes:
+      - sonarr_config:/config
+      - /mnt/hd-externo/series:/tv
+      - /mnt/hd-externo/downloads:/downloads
+    environment:
+      PUID: ${PUID:-1000}
+      PGID: ${PGID:-1000}
+      TZ: ${TZ:-America/Recife}
+
+  # ---------------------------------------------------------------------------
+  # Radarr — Automação de download e organização de filmes
+  # Acesso: http://<ip>:7878
+  # ---------------------------------------------------------------------------
+  radarr:
+    image: linuxserver/radarr:latest
+    container_name: radarr
+    restart: unless-stopped
+    ports:
+      - "7878:7878"
+    volumes:
+      - radarr_config:/config
+      - /mnt/hd-externo/filmes:/movies
+      - /mnt/hd-externo/downloads:/downloads
+    environment:
+      PUID: ${PUID:-1000}
+      PGID: ${PGID:-1000}
+      TZ: ${TZ:-America/Recife}
+
+  # ---------------------------------------------------------------------------
+  # qBittorrent — Cliente BitTorrent com interface web
+  # Acesso: http://<ip>:8090
+  # Senha padrão: adminadmin (altere na primeira execução)
+  # ---------------------------------------------------------------------------
+  qbittorrent:
+    image: linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    restart: unless-stopped
+    ports:
+      - "8090:8080"
+    volumes:
+      - qbit_config:/config
+      - /mnt/hd-externo/downloads:/downloads
+    environment:
+      PUID: ${PUID:-1000}
+      PGID: ${PGID:-1000}
+      TZ: ${TZ:-America/Recife}
+      # Porta de escuta para o torrent client
+      WEBUI_PORT: 8080
+
+  # ---------------------------------------------------------------------------
+  # Grafana — Visualização de métricas com dashboards customizáveis
+  # Acesso: http://<ip>:3003
+  # Login padrão: admin / admin (será solicitado alterar no primeiro acesso)
+  # ---------------------------------------------------------------------------
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - "3003:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    environment:
+      TZ: ${TZ:-America/Recife}
+      # Para desabilitar login (uso local), descomente:
+      # GF_AUTH_ANONYMOUS_ENABLED: "true"
+      # GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
+
+  # ---------------------------------------------------------------------------
+  # Prometheus — Coleta e armazenamento de métricas dos serviços
+  # Acesso: http://<ip>:9090
+  # Configurar scrape targets editando prometheus.yml em config/
+  # ---------------------------------------------------------------------------
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - prometheus_data:/prometheus
+      # Descomente para usar arquivo de configuração customizado:
+      # - ./config/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--storage.tsdb.retention.time=30d"
+
+  # ---------------------------------------------------------------------------
+  # Node Exporter — Exporta métricas do sistema operacional para o Prometheus
+  # Acesso: http://<ip>:9100/metrics
+  # Sem interface web — apenas endpoint de métricas
+  # ---------------------------------------------------------------------------
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      # Montagens somente-leitura para coletar métricas do host
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - "--path.procfs=/host/proc"
+      - "--path.rootfs=/rootfs"
+      - "--path.sysfs=/host/sys"
+      - "--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)"
+
+  # ---------------------------------------------------------------------------
+  # n8n — Plataforma de automação de fluxos de trabalho (alternativa ao Zapier)
+  # Acesso: http://<ip>:5678
+  # ---------------------------------------------------------------------------
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    volumes:
+      - n8n_data:/home/node/.n8n
+    environment:
+      TZ: ${TZ:-America/Recife}
+      # URL base para webhooks (substitua pelo IP/domínio real)
+      # WEBHOOK_URL: http://192.168.1.X:5678
+
+  # ---------------------------------------------------------------------------
+  # Webhook GPU — Controla o GPU Stack via HTTP (subir/derrubar Ollama e WebUI)
+  # Acesso: http://<ip>:5000
+  # Endpoints: /gpu/start, /gpu/stop, /status, /health
+  # ---------------------------------------------------------------------------
+  webhook:
+    build: ./gpu-stack/webhook
+    container_name: webhook-gpu
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    volumes:
+      # Acesso ao Docker socket para executar docker compose
+      - /var/run/docker.sock:/var/run/docker.sock
+      # Diretório com o docker-compose.yml do GPU Stack
+      - ./gpu-stack:/opt/gpu-stack
+
+# =============================================================================
+# Volumes nomeados — dados persistentes gerenciados pelo Docker
+# =============================================================================
+volumes:
+  jellyfin_config:
+  sonarr_config:
+  radarr_config:
+  qbit_config:
+  grafana_data:
+  prometheus_data:
+  n8n_data:

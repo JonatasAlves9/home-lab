@@ -1,0 +1,57 @@
+# =============================================================================
+# Homepage — Configurações Gerais
+# Docs: https://gethomepage.dev/latest/configs/settings/
+# =============================================================================
+
+# Título exibido na aba do navegador e no topo da página
+title: Home Lab
+
+# Tema: light | dark
+theme: dark
+
+# Paleta de cores: slate | gray | zinc | neutral | stone | red | orange |
+#                  amber | yellow | lime | green | emerald | teal | cyan |
+#                  sky | blue | indigo | violet | purple | fuchsia | pink | rose
+color: slate
+
+# Idioma da interface
+language: pt
+
+# Ícone da aba do navegador (favicon)
+# Pode ser uma URL ou um ícone do dashboard-icons
+favicon: https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/homelab.png
+
+# Imagem de fundo (opcional)
+# background:
+#   image: /images/background.jpg
+#   blur: sm       # xs | sm | md | xl | 2xl | 3xl
+#   saturate: 50   # porcentagem de saturação (0-100)
+#   brightness: 50 # porcentagem de brilho (0-100)
+#   opacity: 50    # porcentagem de opacidade (0-100)
+
+# Layout dos grupos de serviços
+# Define a ordem e o estilo de cada coluna
+layout:
+  Notebook — 24/7:
+    style: row
+    columns: 3
+
+  Desktop — Sob Demanda:
+    style: row
+    columns: 4
+
+  GPU Stack:
+    style: row
+    columns: 3
+
+# Logs do homepage (útil para debug)
+# logpath: /app/config/logs
+
+# Habilitar log de acesso detalhado
+# showStats: true
+
+# Exibir ícones de status dos containers Docker
+statusStyle: dot
+
+# Exibir versão do Homepage no rodapé
+hideVersion: false

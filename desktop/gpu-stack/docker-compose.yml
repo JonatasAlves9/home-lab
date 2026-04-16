@@ -1,0 +1,77 @@
+version: "3.8"
+
+# =============================================================================
+# GPU Stack — Ollama + Open WebUI com suporte AMD ROCm
+#
+# IMPORTANTE: Este stack NÃO sobe automaticamente (restart: no)
+# Suba manualmente quando precisar usar IA local:
+#   docker compose up -d
+# Ou via webhook:
+#   curl http://<desktop-ip>:5000/gpu/start
+#
+# Pré-requisito: ROCm instalado (pelo script setup-desktop.sh)
+# Verificar: rocm-smi
+# =============================================================================
+
+services:
+
+  # ---------------------------------------------------------------------------
+  # Ollama — Motor de inferência de LLMs com suporte AMD ROCm
+  # Acesso API: http://<ip>:11434
+  #
+  # Para baixar um modelo:
+  #   docker exec ollama ollama pull llama3.2
+  #   docker exec ollama ollama pull codellama
+  #   docker exec ollama ollama pull mistral
+  #
+  # Para listar modelos disponíveis:
+  #   docker exec ollama ollama list
+  # ---------------------------------------------------------------------------
+  ollama:
+    image: ollama/ollama:rocm
+    container_name: ollama
+    # Não reinicia automaticamente — sobe apenas quando solicitado
+    restart: "no"
+    ports:
+      - "11434:11434"
+    devices:
+      # Dispositivo de compute da GPU AMD (necessário para ROCm)
+      - /dev/kfd:/dev/kfd
+      # Dispositivos de renderização (podem ser múltiplos: renderD128, renderD129...)
+      - /dev/dri:/dev/dri
+    group_add:
+      # Grupos necessários para acesso à GPU AMD
+      - video
+      - render
+    volumes:
+      # Modelos baixados ficam persistidos aqui
+      - ollama_data:/root/.ollama
+    environment:
+      # Força o uso da GPU AMD via ROCm
+      HSA_OVERRIDE_GFX_VERSION: "10.3.0"
+
+  # ---------------------------------------------------------------------------
+  # Open WebUI — Interface web amigável para conversar com modelos Ollama
+  # Acesso: http://<ip>:3004
+  # Na primeira vez, crie uma conta de administrador
+  # ---------------------------------------------------------------------------
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    restart: "no"
+    ports:
+      - "3004:8080"
+    environment:
+      # URL do Ollama — usa a rede interna do Docker Compose
+      OLLAMA_BASE_URL: http://ollama:11434
+    volumes:
+      - webui_data:/app/backend/data
+    depends_on:
+      - ollama
+
+# =============================================================================
+# Volumes nomeados para persistência dos dados da GPU Stack
+# =============================================================================
+volumes:
+  ollama_data:
+  webui_data:

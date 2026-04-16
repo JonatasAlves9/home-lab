@@ -1,0 +1,29 @@
+# Arquivos de ambiente — NUNCA commitar senhas ou tokens
+.env
+*.env
+
+# Diretórios de dados persistentes
+data/
+config/secrets/
+
+# Logs
+*.log
+
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
