@@ -185,6 +185,26 @@ services:
       TZ: ${TZ:-America/Recife}
 
   # ---------------------------------------------------------------------------
+  # Bazarr — Gerenciador de legendas para Sonarr e Radarr
+  # Acesso: http://<ip>:6767
+  # Configure provedores de legendas e sincronize com Sonarr/Radarr via API
+  # ---------------------------------------------------------------------------
+  bazarr:
+    image: linuxserver/bazarr:latest
+    container_name: bazarr
+    restart: unless-stopped
+    ports:
+      - "6767:6767"
+    volumes:
+      - bazarr_config:/config
+      - ~/media/filmes:/movies
+      - ~/media/series:/tv
+    environment:
+      PUID: ${PUID:-1000}
+      PGID: ${PGID:-1000}
+      TZ: ${TZ:-America/Recife}
+
+  # ---------------------------------------------------------------------------
   # Webhook GPU — Controla o GPU Stack via HTTP (subir/derrubar Ollama e WebUI)
   # Acesso: http://<ip>:5000
   # Endpoints: /gpu/start, /gpu/stop, /status, /health
@@ -213,3 +233,4 @@ volumes:
   prometheus_data:
   n8n_data:
   prowlarr_config:
+  bazarr_config:
