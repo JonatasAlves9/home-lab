@@ -94,6 +94,9 @@ services:
     image: pihole/pihole:latest
     container_name: pihole
     restart: unless-stopped
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
     ports:
       - "53:53/tcp"
       - "53:53/udp"
