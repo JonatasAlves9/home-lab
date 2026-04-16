@@ -23,11 +23,11 @@ favicon: https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/ho
 
 # Imagem de fundo (opcional)
 background:
-  image: /images/background.jpg
+  image: https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=1920&q=80
   blur: md
   saturate: 70
   brightness: 35
-  opacity: 85
+  opacity: 80
 
 # Layout dos grupos de serviços
 # Define a ordem e o estilo de cada coluna
