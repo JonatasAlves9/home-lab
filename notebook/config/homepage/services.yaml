@@ -23,11 +23,11 @@
         href: "http://{{HOMEPAGE_VAR_NOTEBOOK_IP}}:3001"
         description: Servidor Git self-hosted
         icon: gitea.png
-        widget:
-          type: gitea
-          url: "http://{{HOMEPAGE_VAR_NOTEBOOK_IP}}:3001"
-          # Gere um token em: Gitea > Configurações > Aplicativos
-          key: "{{HOMEPAGE_VAR_GITEA_KEY}}"
+        # widget:
+        #   type: gitea
+        #   url: "http://{{HOMEPAGE_VAR_NOTEBOOK_IP}}:3001"
+        #   # Gere um token em: Gitea > Configurações > Aplicativos
+        #   key: "{{HOMEPAGE_VAR_GITEA_KEY}}"
 
     - Vaultwarden:
         href: "http://{{HOMEPAGE_VAR_NOTEBOOK_IP}}:8081"
