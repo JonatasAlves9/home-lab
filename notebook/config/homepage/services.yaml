@@ -40,6 +40,7 @@
         icon: pi-hole.png
         widget:
           type: pihole
+          version: 6
           url: "http://{{HOMEPAGE_VAR_NOTEBOOK_IP}}"
           key: "{{HOMEPAGE_VAR_PIHOLE_KEY}}"
 
