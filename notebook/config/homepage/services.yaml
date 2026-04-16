@@ -35,13 +35,12 @@
         icon: bitwarden.png
 
     - Pi-hole:
-        href: "http://{{HOMEPAGE_VAR_NOTEBOOK_IP}}:8082/admin"
+        href: "http://{{HOMEPAGE_VAR_NOTEBOOK_IP}}/admin"
         description: Bloqueio de anúncios via DNS
         icon: pi-hole.png
         widget:
           type: pihole
-          url: "http://{{HOMEPAGE_VAR_NOTEBOOK_IP}}:8082"
-          # Gere uma API key em: Pi-hole > Settings > API / Web interface
+          url: "http://{{HOMEPAGE_VAR_NOTEBOOK_IP}}"
           key: "{{HOMEPAGE_VAR_PIHOLE_KEY}}"
 
     - Uptime Kuma:
