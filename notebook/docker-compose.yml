@@ -103,7 +103,7 @@ services:
     environment:
       WEBPASSWORD: ${PIHOLE_PASSWORD}
       TZ: America/Recife
-      WEB_PORT: 8082
+      FTLCONF_webserver_port: "8082o,[::]:8082o"
     volumes:
       - pihole_data:/etc/pihole
     cap_add:
