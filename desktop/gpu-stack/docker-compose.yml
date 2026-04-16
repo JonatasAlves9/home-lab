@@ -50,6 +50,8 @@ services:
       HSA_OVERRIDE_GFX_VERSION: "10.3.0"
       # Desabilita SDMA — corrige memory access fault em GPUs Navi 1x (RX 5500 XT)
       HSA_ENABLE_SDMA: "0"
+      # Habilita Unified Memory Access — necessário em GPUs sem VMM (RX 5500 XT)
+      GGML_HIP_UMA: "1"
 
   # ---------------------------------------------------------------------------
   # Open WebUI — Interface web amigável para conversar com modelos Ollama
