@@ -121,8 +121,7 @@ services:
       - "9090:9090"
     volumes:
       - prometheus_data:/prometheus
-      # Descomente para usar arquivo de configuração customizado:
-      # - ./config/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml:ro
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--storage.tsdb.path=/prometheus"
