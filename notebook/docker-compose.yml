@@ -34,6 +34,7 @@ services:
       HOMEPAGE_VAR_NEXTCLOUD_PASS: ${NEXTCLOUD_ADMIN_PASSWORD:-}
       HOMEPAGE_VAR_PIHOLE_KEY: ${PIHOLE_KEY:-}
       HOMEPAGE_VAR_UPTIME_KEY: ${UPTIME_KEY:-}
+      HOMEPAGE_ALLOWED_HOSTS: ${NOTEBOOK_IP:-192.168.68.105}:3000
 
   # ---------------------------------------------------------------------------
   # Nextcloud — Armazenamento pessoal em nuvem
