@@ -54,6 +54,21 @@ services:
   # Acesso: http://<ip>:3004
   # Na primeira vez, crie uma conta de administrador
   # ---------------------------------------------------------------------------
+  # ---------------------------------------------------------------------------
+  # SearXNG — Motor de busca self-hosted integrado ao Open WebUI
+  # Acesso: http://<ip>:8888
+  # ---------------------------------------------------------------------------
+  searxng:
+    image: searxng/searxng:latest
+    container_name: searxng
+    restart: "no"
+    ports:
+      - "8888:8080"
+    volumes:
+      - searxng_data:/etc/searxng
+    environment:
+      SEARXNG_BASE_URL: "http://searxng:8080"
+
   open-webui:
     image: ghcr.io/open-webui/open-webui:main
     container_name: open-webui
@@ -63,10 +78,15 @@ services:
     environment:
       # URL do Ollama — usa a rede interna do Docker Compose
       OLLAMA_BASE_URL: http://ollama:11434
+      # Integração com SearXNG para pesquisa na internet
+      ENABLE_RAG_WEB_SEARCH: "true"
+      RAG_WEB_SEARCH_ENGINE: searxng
+      SEARXNG_QUERY_URL: "http://searxng:8080/search?q=<query>&format=json"
     volumes:
       - webui_data:/app/backend/data
     depends_on:
       - ollama
+      - searxng
 
 # =============================================================================
 # Volumes nomeados para persistência dos dados da GPU Stack
@@ -74,3 +94,4 @@ services:
 volumes:
   ollama_data:
   webui_data:
+  searxng_data:
