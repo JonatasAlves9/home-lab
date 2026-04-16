@@ -22,12 +22,12 @@ language: pt
 favicon: https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/homelab.png
 
 # Imagem de fundo (opcional)
-# background:
-#   image: /images/background.jpg
-#   blur: sm       # xs | sm | md | xl | 2xl | 3xl
-#   saturate: 50   # porcentagem de saturação (0-100)
-#   brightness: 50 # porcentagem de brilho (0-100)
-#   opacity: 50    # porcentagem de opacidade (0-100)
+background:
+  image: /images/background.jpg
+  blur: md
+  saturate: 70
+  brightness: 35
+  opacity: 85
 
 # Layout dos grupos de serviços
 # Define a ordem e o estilo de cada coluna
