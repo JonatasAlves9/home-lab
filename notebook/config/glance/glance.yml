@@ -83,13 +83,9 @@ pages:
 
           - type: hacker-news
 
-          - type: github-trending-repositories
-            limit: 8
-            languages:
-              - python
-              - go
-              - typescript
-              - rust
+          - type: lobsters
+            limit: 15
+            collapse-after: 5
 
       - size: small
         widgets:
@@ -237,16 +233,10 @@ pages:
 
       - size: full
         widgets:
-          - type: github-trending-repositories
-            title: Em Alta no GitHub — Semana
-            since: weekly
-            limit: 12
-            languages:
-              - python
-              - go
-              - rust
-              - typescript
-              - shell
+          - type: lobsters
+            title: Lobsters
+            limit: 15
+            collapse-after: 5
 
           - type: rss
             title: Linux & Self-Hosting
