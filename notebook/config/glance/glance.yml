@@ -49,6 +49,9 @@ pages:
               - title: Uptime Kuma
                 url: http://manager:3002/status/homelab
                 icon: si:uptimekuma
+              - title: Duplicati
+                url: http://manager:8200
+                icon: si:duplicati
               - title: Gitea
                 url: http://manager:3001
                 icon: si:gitea
@@ -123,6 +126,9 @@ pages:
                   - title: Pi-hole
                     url: http://manager:8082/admin
                     icon: si:pihole
+                  - title: Duplicati
+                    url: http://manager:8200
+                    icon: si:duplicati
                   - title: FreshRSS
                     url: http://manager:8083
                     icon: si:freshrss
