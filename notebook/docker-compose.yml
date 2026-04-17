@@ -219,6 +219,7 @@ services:
       PGID: 1000
       TZ: America/Recife
       SETTINGS_ENCRYPTION_KEY: ${DUPLICATI_ENCRYPTION_KEY}
+      DUPLICATI__WEBSERVICE_PASSWORD: ${DUPLICATI_PASSWORD}
 
   tailscale:
     image: tailscale/tailscale:latest
