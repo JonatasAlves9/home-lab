@@ -42,6 +42,7 @@ services:
       HOMEPAGE_VAR_UPTIME_KEY: ${UPTIME_KEY:-}
       HOMEPAGE_VAR_GRAFANA_USER: ${GRAFANA_USER:-admin}
       HOMEPAGE_VAR_GRAFANA_PASS: ${GRAFANA_PASS:-}
+      HOMEPAGE_VAR_GRAFANA_TOKEN: ${GRAFANA_TOKEN:-}
       HOMEPAGE_ALLOWED_HOSTS: ${NOTEBOOK_IP:-192.168.68.105}:3000,100.65.108.30:3000
 
   # ---------------------------------------------------------------------------

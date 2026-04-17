@@ -132,12 +132,12 @@
 
     - Grafana:
         href: "http://{{HOMEPAGE_VAR_DESKTOP_IP}}:3003"
-        description: Dashboards de métricas
+        description: Dashboards de métricas do sistema
         icon: grafana.png
         widget:
           type: grafana
           url: "http://{{HOMEPAGE_VAR_DESKTOP_IP}}:3003"
-          username: admin
+          username: "{{HOMEPAGE_VAR_GRAFANA_USER}}"
           password: "{{HOMEPAGE_VAR_GRAFANA_PASS}}"
 
 # -----------------------------------------------------------------------------
