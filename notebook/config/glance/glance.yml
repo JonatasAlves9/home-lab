@@ -214,15 +214,6 @@ pages:
 
       - size: full
         widgets:
-          - type: videos
-            title: YouTube — Dev
-            channels:
-              - UCXEuwt31W3ZnXYEbCXQJJXA  # ThePrimeagen
-              - UCbRP3rBRxpzmkzOmgKHQ_0A  # Theo (t3.gg)
-              - UCFuIUoyHB12qpYa8Jpicld   # Codigo Fonte TV
-              - UCsBjURrPoezykLs9EqgamOA  # Fireship
-              - UCxLMFZA14lsDtKyShTlcwkA  # Dreams of Code
-
           - type: rss
             title: Dev & Programação
             limit: 20
