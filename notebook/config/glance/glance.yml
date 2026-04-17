@@ -196,8 +196,6 @@ pages:
         widgets:
           - type: videos
             title: YouTube — Dev & Tech
-            style: grid-cards
-            collapse-after-rows: 3
             channels:
               - UCUyeluBRhGPCW4rPe_UvBZQ  # ThePrimeagen
               - UCbRP3yVgFWigh5QoM-nn9oQ  # Theo (t3.gg)
