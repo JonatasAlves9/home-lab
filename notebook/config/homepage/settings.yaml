@@ -1,17 +1,19 @@
 title: Home Lab
 theme: dark
-color: slate
+color: violet
 language: pt
 favicon: https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/homelab.png
 
 background:
   image: https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=1920&q=80
   blur: sm
-  saturate: 50
-  brightness: 20
-  opacity: 100
+  saturate: 60
+  brightness: 40
+  opacity: 85
 
 headerStyle: underline
+
+cardBlur: sm
 
 layout:
   Sempre Ligado:
