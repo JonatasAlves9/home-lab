@@ -218,6 +218,7 @@ services:
       PUID: 1000
       PGID: 1000
       TZ: America/Recife
+      SETTINGS_ENCRYPTION_KEY: ${DUPLICATI_ENCRYPTION_KEY}
 
   tailscale:
     image: tailscale/tailscale:latest
