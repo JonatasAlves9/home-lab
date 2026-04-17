@@ -25,11 +25,6 @@
         href: "http://{{HOMEPAGE_VAR_NOTEBOOK_IP}}:8082/admin"
         description: Bloqueio de anúncios via DNS
         icon: pi-hole.png
-        widget:
-          type: pihole
-          version: 6
-          url: "http://{{HOMEPAGE_VAR_NOTEBOOK_IP}}:8082"
-          password: "{{HOMEPAGE_VAR_PIHOLE_KEY}}"
 
     - Uptime Kuma:
         href: "http://{{HOMEPAGE_VAR_NOTEBOOK_IP}}:3002"
