@@ -201,6 +201,24 @@ services:
   # Tailscale — VPN mesh para acesso seguro de qualquer lugar
   # Após subir: docker exec tailscale tailscale up --authkey=$TS_AUTHKEY
   # ---------------------------------------------------------------------------
+  duplicati:
+    image: linuxserver/duplicati:latest
+    container_name: duplicati
+    restart: unless-stopped
+    ports:
+      - "8200:8200"
+    volumes:
+      - duplicati_config:/config
+      - /mnt/desktop:/mnt/desktop:ro
+      - nextcloud_data:/source/nextcloud:ro
+      - gitea_data:/source/gitea:ro
+      - vaultwarden_data:/source/vaultwarden:ro
+      - ~/homelab:/source/homelab:ro
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: America/Recife
+
   tailscale:
     image: tailscale/tailscale:latest
     container_name: tailscale
@@ -227,6 +245,7 @@ volumes:
   pihole_data:
   uptime_data:
   freshrss_data:
+  duplicati_config:
   tailscale_data:
   npm_data:
   npm_letsencrypt:
