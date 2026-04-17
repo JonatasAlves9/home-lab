@@ -28,7 +28,7 @@ services:
     extra_hosts:
       # Permite que o container resolva os hostnames da rede local
       - "manager:host-gateway"
-      - "manager-1:${DESKTOP_IP:-192.168.68.111}"
+      - "manager-1:192.168.68.111"
     environment:
       # IPs usados nos widgets do homepage — ajuste conforme sua rede
       HOMEPAGE_VAR_NOTEBOOK_IP: ${NOTEBOOK_IP:-localhost}
