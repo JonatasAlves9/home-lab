@@ -1,17 +1,14 @@
 # =============================================================================
 # Homepage — Configuração de Serviços
-# Organizado em três grupos: Notebook 24/7, Desktop Sob Demanda, GPU Stack
-# Variáveis de ambiente são resolvidas pelo Homepage no runtime
-# Docs: https://gethomepage.dev/latest/configs/services/
 # =============================================================================
 
 # -----------------------------------------------------------------------------
-# Grupo 1: Serviços do Notebook — disponíveis 24 horas por dia
+# Grupo 1: Infraestrutura sempre ligada no Notebook
 # -----------------------------------------------------------------------------
-- Notebook — 24/7:
+- Sempre Ligado:
     - Nextcloud:
         href: "http://{{HOMEPAGE_VAR_NOTEBOOK_IP}}:8080"
-        description: Armazenamento pessoal em nuvem
+        description: Armazenamento em nuvem pessoal
         icon: nextcloud.png
         widget:
           type: nextcloud
@@ -19,19 +16,9 @@
           username: "{{HOMEPAGE_VAR_NEXTCLOUD_USER}}"
           password: "{{HOMEPAGE_VAR_NEXTCLOUD_PASS}}"
 
-    - Gitea:
-        href: "http://{{HOMEPAGE_VAR_NOTEBOOK_IP}}:3001"
-        description: Servidor Git self-hosted
-        icon: gitea.png
-        # widget:FreshRSS
-        #   type: gitea
-        #   url: "http://{{HOMEPAGE_VAR_NOTEBOOK_IP}}:3001"
-        #   # Gere um token em: Gitea > Configurações > Aplicativos
-        #   key: "{{HOMEPAGE_VAR_GITEA_KEY}}"
-
     - Vaultwarden:
         href: "http://{{HOMEPAGE_VAR_NOTEBOOK_IP}}:8081"
-        description: Gerenciador de senhas (compatível Bitwarden)
+        description: Gerenciador de senhas
         icon: bitwarden.png
 
     - Pi-hole:
@@ -46,70 +33,54 @@
 
     - Uptime Kuma:
         href: "http://{{HOMEPAGE_VAR_NOTEBOOK_IP}}:3002"
-        description: Monitor de disponibilidade dos serviços
+        description: Monitor de disponibilidade
         icon: uptime-kuma.png
         widget:
           type: uptimekuma
           url: "http://{{HOMEPAGE_VAR_NOTEBOOK_IP}}:3002"
           slug: homelab
 
+    - Gitea:
+        href: "http://{{HOMEPAGE_VAR_NOTEBOOK_IP}}:3001"
+        description: Servidor Git self-hosted
+        icon: gitea.png
+
     - FreshRSS:
         href: "http://{{HOMEPAGE_VAR_NOTEBOOK_IP}}:8083"
-        description: Agregador de feeds RSS
+        description: Leitor de feeds RSS
         icon: freshrss.png
-        # widget:
-        #   type: freshrss
-        #   url: "http://{{HOMEPAGE_VAR_NOTEBOOK_IP}}:8083"
-        #   username: "{{HOMEPAGE_VAR_FRESHRSS_USER}}"
-        #   password: "{{HOMEPAGE_VAR_FRESHRSS_PASS}}"
 
 # -----------------------------------------------------------------------------
-# Grupo 2: Serviços do Desktop — ligado sob demanda via Wake on LAN
+# Grupo 2: Mídia e downloads — Desktop sob demanda
 # -----------------------------------------------------------------------------
-- Desktop — Sob Demanda:
-    - Ligar Desktop:
-        href: "http://{{HOMEPAGE_VAR_NOTEBOOK_IP}}:5001/wol/start"
-        description: Liga o Desktop via Wake on LAN
-        icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/proxmox.png
-        widget:
-          type: customapi
-          url: "http://{{HOMEPAGE_VAR_NOTEBOOK_IP}}:5001/wol/status"
-          refreshInterval: 30000
-          method: GET
-          mappings:
-            - field: online
-              label: Online
-
+- Mídia & Downloads:
     - Jellyfin:
         href: "http://{{HOMEPAGE_VAR_DESKTOP_IP}}:8096"
-        description: Servidor de mídia (filmes e séries)
+        description: Servidor de filmes e séries
         icon: jellyfin.png
         widget:
           type: jellyfin
           url: "http://{{HOMEPAGE_VAR_DESKTOP_IP}}:8096"
-          # Gere uma API key em: Jellyfin > Painel > API Keys
           key: "{{HOMEPAGE_VAR_JELLYFIN_KEY}}"
           enableBlocks: true
           enableNowPlaying: true
 
     - Sonarr:
         href: "http://{{HOMEPAGE_VAR_DESKTOP_IP}}:8989"
-        description: Automação de download de séries
+        description: Automação de séries
         icon: sonarr.png
         widget:
           type: sonarr
           url: "http://{{HOMEPAGE_VAR_DESKTOP_IP}}:8989"
-          # Encontre a API key em: Sonarr > Settings > General
           key: "{{HOMEPAGE_VAR_SONARR_KEY}}"
 
     - Radarr:
         href: "http://{{HOMEPAGE_VAR_DESKTOP_IP}}:7878"
-        description: Automação de download de filmes
+        description: Automação de filmes
         icon: radarr.png
         widget:
           type: radarr
           url: "http://{{HOMEPAGE_VAR_DESKTOP_IP}}:7878"
-          # Encontre a API key em: Radarr > Settings > General
           key: "{{HOMEPAGE_VAR_RADARR_KEY}}"
 
     - qBittorrent:
@@ -122,9 +93,46 @@
           username: admin
           password: "{{HOMEPAGE_VAR_QBIT_PASS}}"
 
+    - Prowlarr:
+        href: "http://{{HOMEPAGE_VAR_DESKTOP_IP}}:9696"
+        description: Gerenciador de indexadores
+        icon: prowlarr.png
+
+    - Bazarr:
+        href: "http://{{HOMEPAGE_VAR_DESKTOP_IP}}:6767"
+        description: Gerenciador de legendas
+        icon: bazarr.png
+
+# -----------------------------------------------------------------------------
+# Grupo 3: IA e automação
+# -----------------------------------------------------------------------------
+- IA & Automação:
+    - Open WebUI:
+        href: "http://{{HOMEPAGE_VAR_DESKTOP_IP}}:3004"
+        description: Chat com IA local
+        icon: ollama.png
+
+    - Ollama:
+        href: "http://{{HOMEPAGE_VAR_DESKTOP_IP}}:11434"
+        description: Motor de LLM (AMD Vulkan)
+        icon: ollama.png
+        widget:
+          type: customapi
+          url: "http://{{HOMEPAGE_VAR_DESKTOP_IP}}:5000/status"
+          refreshInterval: 30000
+          method: GET
+          mappings:
+            - field: running
+              label: GPU Stack
+
+    - n8n:
+        href: "http://{{HOMEPAGE_VAR_DESKTOP_IP}}:5678"
+        description: Automação de fluxos
+        icon: n8n.png
+
     - Grafana:
         href: "http://{{HOMEPAGE_VAR_DESKTOP_IP}}:3003"
-        description: Dashboards de métricas do sistema
+        description: Dashboards de métricas
         icon: grafana.png
         widget:
           type: grafana
@@ -132,37 +140,22 @@
           username: admin
           password: "{{HOMEPAGE_VAR_GRAFANA_PASS}}"
 
-    - n8n:
-        href: "http://{{HOMEPAGE_VAR_DESKTOP_IP}}:5678"
-        description: Automação de fluxos e integrações
-        icon: n8n.png
-
 # -----------------------------------------------------------------------------
-# Grupo 3: GPU Stack — Ollama e Open WebUI para IA local
+# Grupo 4: Controles — ligar e desligar Desktop e GPU Stack
 # -----------------------------------------------------------------------------
-- GPU Stack:
-    - Ollama:
-        href: "http://{{HOMEPAGE_VAR_DESKTOP_IP}}:11434"
-        description: Motor de LLM local com suporte AMD ROCm
-        icon: ollama.png
-
-    - Open WebUI:
-        href: "http://{{HOMEPAGE_VAR_DESKTOP_IP}}:3004"
-        description: Interface web para o Ollama
-        icon: ollama.png
-
-    - Webhook GPU:
-        href: "http://{{HOMEPAGE_VAR_DESKTOP_IP}}:5000"
-        description: Ligar / Desligar GPU Stack
-        icon: docker.png
+- Controles:
+    - Ligar Desktop:
+        href: "http://{{HOMEPAGE_VAR_NOTEBOOK_IP}}:5001/wol/start"
+        description: Wake on LAN
+        icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/proxmox.png
         widget:
           type: customapi
-          url: "http://{{HOMEPAGE_VAR_DESKTOP_IP}}:5000/health"
-          refreshInterval: 30000
+          url: "http://{{HOMEPAGE_VAR_NOTEBOOK_IP}}:5001/wol/status"
+          refreshInterval: 15000
           method: GET
           mappings:
-            - field: status
-              label: Status
+            - field: online
+              label: Desktop
 
     - Ligar GPU:
         href: "http://{{HOMEPAGE_VAR_DESKTOP_IP}}:5000/gpu/start"
@@ -171,5 +164,10 @@
 
     - Desligar GPU:
         href: "http://{{HOMEPAGE_VAR_DESKTOP_IP}}:5000/gpu/stop"
-        description: Desliga GPU Stack e o Desktop
+        description: Para Ollama + Open WebUI
+        icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/docker.png
+
+    - Desligar Desktop:
+        href: "http://{{HOMEPAGE_VAR_DESKTOP_IP}}:5000/desktop/stop"
+        description: Desliga o Desktop
         icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/portainer.png

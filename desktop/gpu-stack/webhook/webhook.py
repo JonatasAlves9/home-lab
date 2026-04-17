@@ -39,21 +39,28 @@ def gpu_start():
 
 @app.route("/gpu/stop")
 def gpu_stop():
-    """Derruba o GPU Stack e depois desliga o sistema."""
+    """Derruba apenas o GPU Stack (Ollama + Open WebUI + SearXNG)."""
     try:
-        # Derruba os containers do GPU Stack
         subprocess.Popen(
             ["docker", "compose", "-f", GPU_COMPOSE_FILE, "down"],
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
         )
-        # Agenda o desligamento do sistema (não bloqueante)
+        return jsonify({"status": "stopping", "message": "GPU Stack sendo desligado"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+@app.route("/desktop/stop")
+def desktop_stop():
+    """Desliga o sistema."""
+    try:
         subprocess.Popen(
             ["nsenter", "-t", "1", "-m", "-u", "-i", "-n", "-p", "--", "shutdown", "-h", "now"],
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
         )
-        return jsonify({"status": "stopping", "message": "GPU Stack sendo desligado e sistema encerrando"})
+        return jsonify({"status": "stopping", "message": "Sistema encerrando"})
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
