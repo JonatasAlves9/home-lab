@@ -43,7 +43,7 @@ pages:
                 url: http://manager:8081
                 icon: si:bitwarden
               - title: Pi-hole
-                url: http://manager:8082
+                url: http://manager:8082/api/info/version
                 icon: si:pihole
               - title: Uptime Kuma
                 url: http://manager:3002
