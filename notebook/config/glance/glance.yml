@@ -40,7 +40,7 @@ pages:
                 url: http://manager:8080
                 icon: si:nextcloud
               - title: Vaultwarden
-                url: http://manager:8081
+                url: https://manager.tailca8f4.ts.net
                 icon: si:bitwarden
               - title: Pi-hole
                 url: http://manager:8082/admin
@@ -116,7 +116,7 @@ pages:
                     url: http://manager:3001
                     icon: si:gitea
                   - title: Vaultwarden
-                    url: http://manager:8081
+                    url: https://manager.tailca8f4.ts.net
                     icon: si:bitwarden
                   - title: Pi-hole
                     url: http://manager:8082/admin

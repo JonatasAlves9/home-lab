@@ -17,7 +17,7 @@
           password: "{{HOMEPAGE_VAR_NEXTCLOUD_PASS}}"
 
     - Vaultwarden:
-        href: "http://{{HOMEPAGE_VAR_NOTEBOOK_IP}}:8081"
+        href: "https://manager.tailca8f4.ts.net"
         description: Gerenciador de senhas
         icon: bitwarden.png
 
