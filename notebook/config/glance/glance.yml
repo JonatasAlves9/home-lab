@@ -2,11 +2,11 @@ server:
   port: 8080
 
 theme:
-  background-color: 222 14 14
-  primary-color: 208 80 58
-  positive-color: 142 68 50
-  negative-color: 4 74 54
-  contrast-multiplier: 1.1
+  background-color: 234 17 12
+  primary-color: 224 87 72
+  positive-color: 93 54 61
+  negative-color: 350 87 70
+  contrast-multiplier: 1.2
 
 pages:
 
