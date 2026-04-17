@@ -195,15 +195,14 @@ pages:
       - size: full
         widgets:
           - type: videos
-            title: YouTube — Tech & Homelab
+            title: YouTube — Dev & Tech
             style: grid-cards
             collapse-after-rows: 3
             channels:
-              - UCXuqSBlHAE6Xw-yeJA0Tunw  # Linus Tech Tips
-              - UCR-DXc1voovS8nhAvccRZhg  # Jeff Geerling
-              - UC9x0AN7BWHpCDHSm9NiJFJQ  # NetworkChuck
-              - UCVls1GmFKf6WlTraIb_IaJg  # Craft Computing
-              - UCOk-gHyjcWZNj3Br3flm1hA  # Techno Tim
+              - UCUyeluBRhGPCW4rPe_UvBZQ  # ThePrimeagen
+              - UCbRP3yVgFWigh5QoM-nn9oQ  # Theo (t3.gg)
+              - UC7yZ6keOGsvERMp2HaEbbXQ  # DevAsLife
+              - UCZxr48h7_qEXuM1imy6NcCg  # Compilado Codigo Fonte
 
       - size: small
         widgets:
