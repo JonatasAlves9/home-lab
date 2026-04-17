@@ -182,6 +182,7 @@ services:
     volumes:
       - npm_data:/data
       - npm_letsencrypt:/etc/letsencrypt
+      - ~/homelab/notebook/certs:/certs:ro
 
   # ---------------------------------------------------------------------------
   # WoL — Endpoint HTTP para ligar o Desktop via Wake on LAN
