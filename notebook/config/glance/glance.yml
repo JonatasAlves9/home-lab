@@ -158,6 +158,20 @@ pages:
                   - title: SearXNG
                     url: http://manager-1:8888
                     icon: si:searxng
+              - title: Controles
+                links:
+                  - title: Ligar Desktop (WoL)
+                    url: http://manager:5001/wol/start
+                    icon: si:powerautomate
+                  - title: Ligar GPU Stack
+                    url: http://manager-1:5000/gpu/start
+                    icon: si:nvidia
+                  - title: Desligar GPU Stack
+                    url: http://manager-1:5000/gpu/stop
+                    icon: si:docker
+                  - title: Desligar Desktop
+                    url: http://manager-1:5000/desktop/stop
+                    icon: si:powerbi
 
   # ===========================================================================
   # Página 2: Mídia — vídeos, streams e redes sociais
