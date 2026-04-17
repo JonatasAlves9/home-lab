@@ -158,6 +158,26 @@ pages:
                   - title: SearXNG
                     url: http://manager-1:8888
                     icon: si:searxng
+              - title: Internet
+                links:
+                  - title: GitHub
+                    url: https://github.com
+                    icon: si:github
+                  - title: YouTube
+                    url: https://youtube.com
+                    icon: si:youtube
+                  - title: X / Twitter
+                    url: https://x.com
+                    icon: si:x
+                  - title: Reddit
+                    url: https://reddit.com
+                    icon: si:reddit
+                  - title: Hacker News
+                    url: https://news.ycombinator.com
+                    icon: si:ycombinator
+                  - title: Lobsters
+                    url: https://lobste.rs
+                    icon: si:lobsters
               - title: Controles
                 links:
                   - title: Ligar Desktop (WoL)
@@ -195,12 +215,43 @@ pages:
       - size: full
         widgets:
           - type: videos
-            title: YouTube — Dev & Tech
+            title: YouTube — Dev
             channels:
-              - UCUyeluBRhGPCW4rPe_UvBZQ  # ThePrimeagen
-              - UCbRP3yVgFWigh5QoM-nn9oQ  # Theo (t3.gg)
-              - UC7yZ6keOGsvERMp2HaEbbXQ  # DevAsLife
-              - UCZxr48h7_qEXuM1imy6NcCg  # Compilado Codigo Fonte
+              - UCXEuwt31W3ZnXYEbCXQJJXA  # ThePrimeagen
+              - UCbRP3rBRxpzmkzOmgKHQ_0A  # Theo (t3.gg)
+              - UCFuIUoyHB12qpYa8Jpicld   # Codigo Fonte TV
+              - UCsBjURrPoezykLs9EqgamOA  # Fireship
+              - UCxLMFZA14lsDtKyShTlcwkA  # Dreams of Code
+
+          - type: rss
+            title: Dev & Programação
+            limit: 20
+            collapse-after: 5
+            feeds:
+              - url: https://www.akitaonrails.com/atom.xml
+                title: Akita On Rails
+              - url: https://dev.to/feed
+                title: DEV.to
+              - url: https://feeds.arstechnica.com/arstechnica/technology-lab
+                title: Ars Technica
+              - url: https://www.theverge.com/rss/index.xml
+                title: The Verge
+              - url: https://imasters.com.br/feed
+                title: iMasters
+
+          - type: reddit
+            title: r/programming
+            subreddit: programming
+            show-thumbnails: false
+            limit: 10
+            collapse-after: 5
+
+          - type: reddit
+            title: r/brasil
+            subreddit: brasil
+            show-thumbnails: true
+            limit: 8
+            collapse-after: 5
 
       - size: small
         widgets:
