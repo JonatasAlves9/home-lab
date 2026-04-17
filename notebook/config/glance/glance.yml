@@ -1,6 +1,5 @@
 server:
   port: 8080
-  assets-path: /app/assets
 
 theme:
   background-color: 222 14 14
