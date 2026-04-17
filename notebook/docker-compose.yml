@@ -46,23 +46,22 @@ services:
       HOMEPAGE_ALLOWED_HOSTS: ${NOTEBOOK_IP:-192.168.68.105}:3000,100.65.108.30:3000
 
   # ---------------------------------------------------------------------------
-  # Homarr — Dashboard alternativo ao Homepage, UI drag-and-drop
-  # Acesso: http://<ip>:7575
+  # Glance — Dashboard minimalista com widgets de RSS, clima, GitHub, mercados
+  # Acesso: http://<ip>:8084
   # ---------------------------------------------------------------------------
-  homarr:
-    image: ghcr.io/ajnart/homarr:latest
-    container_name: homarr
+  glance:
+    image: ghcr.io/glanceapp/glance:latest
+    container_name: glance
     restart: unless-stopped
     ports:
-      - "7575:7575"
+      - "8084:8080"
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - homarr_config:/appdata/configs
-      - homarr_icons:/appdata/icons
-      - homarr_data:/data
+      - ./config/glance/glance.yml:/app/assets/glance.yml:ro
     extra_hosts:
       - "manager:host-gateway"
       - "manager-1:192.168.68.111"
+
+
 
   # ---------------------------------------------------------------------------
   # Nextcloud — Armazenamento pessoal em nuvem
@@ -218,9 +217,6 @@ services:
 # Para inspecionar: docker volume inspect <nome>
 # =============================================================================
 volumes:
-  homarr_config:
-  homarr_icons:
-  homarr_data:
   nextcloud_data:
   gitea_data:
   vaultwarden_data:
