@@ -111,6 +111,9 @@ services:
       - "8081:80"
     volumes:
       - vaultwarden_data:/data
+    environment:
+      DOMAIN: ${VAULTWARDEN_DOMAIN:-https://localhost:8081}
+      WEBSOCKET_ENABLED: "true"
 
   # ---------------------------------------------------------------------------
   # Pi-hole — Bloqueio de anúncios em nível de rede via DNS
