@@ -236,6 +236,35 @@ services:
       TS_AUTHKEY: ${TS_AUTHKEY}
       TS_STATE_DIR: /var/lib/tailscale
 
+  # ---------------------------------------------------------------------------                                                                                                                         
+  # Open Health — App de controle nutricional self-hosted                                                                                                                                               
+  # Frontend: http://<ip>:3003                                                                                                                                                                          
+  # API:      http://<ip>:3004                                                                                                                                                                          
+  # ---------------------------------------------------------------------------                                                                                                                         
+  open-health-api:                                                                                                                                                                                      
+    image: ghcr.io/jonatasalves9/open-health-api:latest   
+    container_name: open-health-api                                                                                                                                                                     
+    restart: unless-stopped
+    volumes:                                                                                                                                                                                            
+      - open_health_data:/data                            
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: /data/open-health.db
+      FRONTEND_URL: http://${NOTEBOOK_IP:-localhost}:3003                                                                                                                                               
+
+  open-health-frontend:                                                                                                                                                                                 
+    image: ghcr.io/jonatasalves9/open-health-frontend:latest
+    container_name: open-health-frontend                                                                                                                                                                
+    restart: unless-stopped                               
+    ports:
+      - "3003:3000"
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_API_URL: http://${NOTEBOOK_IP:-localhost}:3004
+    depends_on:
+      - open-health-api
+
+
 # =============================================================================
 # Volumes nomeados — dados persistentes gerenciados pelo Docker
 # Para inspecionar: docker volume inspect <nome>
@@ -251,3 +280,5 @@ volumes:
   tailscale_data:
   npm_data:
   npm_letsencrypt:
+  open_health_data:
+
