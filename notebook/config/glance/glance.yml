@@ -52,6 +52,9 @@ pages:
               - title: Duplicati
                 url: http://manager:8200
                 icon: si:duplicati
+              - title: Open Health
+                url: http://manager:3003
+                icon: si:applehealth
               - title: Gitea
                 url: http://manager:3001
                 icon: si:gitea
@@ -129,6 +132,9 @@ pages:
                   - title: Duplicati
                     url: http://manager:8200
                     icon: si:duplicati
+                  - title: Open Health
+                    url: http://manager:3003
+                    icon: si:applehealth
                   - title: FreshRSS
                     url: http://manager:8083
                     icon: si:freshrss
