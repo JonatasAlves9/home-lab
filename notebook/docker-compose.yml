@@ -114,6 +114,7 @@ services:
     environment:
       DOMAIN: ${VAULTWARDEN_DOMAIN:-https://localhost:8081}
       WEBSOCKET_ENABLED: "true"
+      ADMIN_TOKEN: ${VAULTWARDEN_ADMIN_TOKEN}
 
   # ---------------------------------------------------------------------------
   # Pi-hole — Bloqueio de anúncios em nível de rede via DNS
