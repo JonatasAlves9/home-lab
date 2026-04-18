@@ -264,6 +264,7 @@ services:
     environment:
       NODE_ENV: production                                                                                                                                                                              
       API_URL: http://open-health-api:3001
+      NEXT_PUBLIC_API_URL: http://${NOTEBOOK_IP}:3004
     depends_on:                             
       - open-health-api                 
 
