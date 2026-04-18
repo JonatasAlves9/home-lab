@@ -53,6 +53,9 @@ services:
     image: glanceapp/glance:latest
     container_name: glance
     restart: unless-stopped
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
     ports:
       - "8084:8080"
     volumes:
@@ -107,6 +110,9 @@ services:
     image: vaultwarden/server:latest
     container_name: vaultwarden
     restart: unless-stopped
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
     ports:
       - "8081:80"
     volumes:
