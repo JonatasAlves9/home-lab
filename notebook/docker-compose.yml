@@ -275,6 +275,42 @@ services:
       - open-health-api                 
 
 
+  # ---------------------------------------------------------------------------
+  # Firefly III — Gerenciador de finanças pessoais
+  # Acesso: http://<ip>:8085
+  # ---------------------------------------------------------------------------
+  firefly:
+    image: fireflyiii/core:latest
+    container_name: firefly
+    restart: unless-stopped
+    ports:
+      - "8085:8080"
+    volumes:
+      - firefly_upload:/var/www/html/storage/upload
+    environment:
+      APP_KEY: ${FIREFLY_APP_KEY}
+      DB_CONNECTION: pgsql
+      DB_HOST: firefly-db
+      DB_PORT: 5432
+      DB_DATABASE: firefly
+      DB_USERNAME: firefly
+      DB_PASSWORD: ${FIREFLY_DB_PASSWORD}
+      APP_URL: http://${NOTEBOOK_IP}:8085
+      TRUSTED_PROXIES: "**"
+    depends_on:
+      - firefly-db
+
+  firefly-db:
+    image: postgres:16-alpine
+    container_name: firefly-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: firefly
+      POSTGRES_USER: firefly
+      POSTGRES_PASSWORD: ${FIREFLY_DB_PASSWORD}
+    volumes:
+      - firefly_db:/var/lib/postgresql/data
+
 # =============================================================================
 # Volumes nomeados — dados persistentes gerenciados pelo Docker
 # Para inspecionar: docker volume inspect <nome>
