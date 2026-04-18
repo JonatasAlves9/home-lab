@@ -327,4 +327,6 @@ volumes:
   npm_data:
   npm_letsencrypt:
   open_health_data:
+  firefly_upload:
+  firefly_db:
 
