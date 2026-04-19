@@ -17,6 +17,10 @@ pages:
     columns:
       - size: small
         widgets:
+          - type: search
+            search-engine: duckduckgo
+            target: _blank
+
           - type: clock
             hour-format: 24h
             timezones:
@@ -28,9 +32,120 @@ pages:
             units: metric
             hour-format: 24h
 
-          - type: search
-            search-engine: duckduckgo
-            target: _blank
+      - size: full
+        widgets:
+          - type: bookmarks
+            title: Notebook
+            groups:
+              - links:
+                  - title: Nextcloud
+                    url: http://manager:8080
+                    icon: si:nextcloud
+                  - title: Gitea
+                    url: http://manager:3001
+                    icon: si:gitea
+                  - title: Vaultwarden
+                    url: https://manager.tailca8f4.ts.net
+                    icon: si:bitwarden
+                  - title: Pi-hole
+                    url: http://manager:8082/admin
+                    icon: si:pihole
+                  - title: FreshRSS
+                    url: http://manager:8083
+                    icon: si:freshrss
+                  - title: Duplicati
+                    url: http://manager:8200
+                    icon: si:duplicati
+                  - title: Open Health
+                    url: http://manager:3003
+                    icon: url:http://manager:3003/favicon.ico
+                  - title: Uptime Kuma
+                    url: http://manager:3002
+                    icon: si:uptimekuma
+
+          - type: bookmarks
+            title: Desktop & Mídia
+            groups:
+              - links:
+                  - title: Jellyfin
+                    url: http://manager-1:8096
+                    icon: si:jellyfin
+                  - title: Sonarr
+                    url: http://manager-1:8989
+                    icon: si:sonarr
+                  - title: Radarr
+                    url: http://manager-1:7878
+                    icon: si:radarr
+                  - title: qBittorrent
+                    url: http://manager-1:8090
+                    icon: si:qbittorrent
+                  - title: Prowlarr
+                    url: http://manager-1:9696
+                    icon: si:prowlarr
+                  - title: n8n
+                    url: http://manager-1:5678
+                    icon: si:n8n
+                  - title: Grafana
+                    url: http://manager-1:3003
+                    icon: si:grafana
+
+          - type: bookmarks
+            title: IA & Finanças
+            groups:
+              - links:
+                  - title: Open WebUI
+                    url: http://manager-1:3004
+                    icon: si:openai
+                  - title: SearXNG
+                    url: http://manager-1:8888
+                    icon: si:searxng
+                  - title: Firefly III
+                    url: http://manager:8085
+                    icon: si:fireflyiii
+
+          - type: bookmarks
+            title: Internet
+            groups:
+              - links:
+                  - title: GitHub
+                    url: https://github.com
+                    icon: si:github
+                  - title: YouTube
+                    url: https://youtube.com
+                    icon: si:youtube
+                  - title: X / Twitter
+                    url: https://x.com
+                    icon: si:x
+                  - title: Reddit
+                    url: https://reddit.com
+                    icon: si:reddit
+                  - title: Hacker News
+                    url: https://news.ycombinator.com
+                    icon: si:ycombinator
+                  - title: Lobsters
+                    url: https://lobste.rs
+                    icon: si:lobsters
+
+          - type: bookmarks
+            title: Controles
+            groups:
+              - links:
+                  - title: Ligar Desktop (WoL)
+                    url: http://manager:5001/wol/start
+                    icon: si:powerautomate
+                  - title: Ligar GPU Stack
+                    url: http://manager-1:5000/gpu/start
+                    icon: si:nvidia
+                  - title: Desligar GPU Stack
+                    url: http://manager-1:5000/gpu/stop
+                    icon: si:docker
+                  - title: Desligar Desktop
+                    url: http://manager-1:5000/desktop/stop
+                    icon: si:powerbi
+
+      - size: small
+        widgets:
+          - type: calendar
 
           - type: monitor
             title: Serviços Online
@@ -73,126 +188,6 @@ pages:
               - title: n8n
                 url: http://manager-1:5678
                 icon: si:n8n
-
-      - size: full
-        widgets:
-          - type: bookmarks
-            title: Acesso Rápido
-            groups:
-              - title: Notebook
-                links:
-                  - title: Nextcloud
-                    url: http://manager:8080
-                    icon: si:nextcloud
-                  - title: Gitea
-                    url: http://manager:3001
-                    icon: si:gitea
-                  - title: Vaultwarden
-                    url: https://manager.tailca8f4.ts.net
-                    icon: si:bitwarden
-                  - title: Pi-hole
-                    url: http://manager:8082/admin
-                    icon: si:pihole
-                  - title: Duplicati
-                    url: http://manager:8200
-                    icon: si:duplicati
-                  - title: Open Health
-                    url: http://manager:3003
-                    icon: url:http://manager:3003/favicon.ico
-                  - title: FreshRSS
-                    url: http://manager:8083
-                    icon: si:freshrss
-                  - title: Uptime Kuma
-                    url: http://manager:3002
-                    icon: si:uptimekuma
-              - title: Finanças
-                links:
-                  - title: Firefly III
-                    url: http://manager:8085
-                    icon: si:fireflyiii
-              - title: Desktop
-                links:
-                  - title: Jellyfin
-                    url: http://manager-1:8096
-                    icon: si:jellyfin
-                  - title: Sonarr
-                    url: http://manager-1:8989
-                    icon: si:sonarr
-                  - title: Radarr
-                    url: http://manager-1:7878
-                    icon: si:radarr
-                  - title: qBittorrent
-                    url: http://manager-1:8090
-                    icon: si:qbittorrent
-                  - title: Prowlarr
-                    url: http://manager-1:9696
-                    icon: si:prowlarr
-                  - title: n8n
-                    url: http://manager-1:5678
-                    icon: si:n8n
-                  - title: Grafana
-                    url: http://manager-1:3003
-                    icon: si:grafana
-              - title: IA
-                links:
-                  - title: Open WebUI
-                    url: http://manager-1:3004
-                    icon: si:openai
-                  - title: SearXNG
-                    url: http://manager-1:8888
-                    icon: si:searxng
-              - title: Internet
-                links:
-                  - title: GitHub
-                    url: https://github.com
-                    icon: si:github
-                  - title: YouTube
-                    url: https://youtube.com
-                    icon: si:youtube
-                  - title: X / Twitter
-                    url: https://x.com
-                    icon: si:x
-                  - title: Reddit
-                    url: https://reddit.com
-                    icon: si:reddit
-                  - title: Hacker News
-                    url: https://news.ycombinator.com
-                    icon: si:ycombinator
-                  - title: Lobsters
-                    url: https://lobste.rs
-                    icon: si:lobsters
-              - title: Controles
-                links:
-                  - title: Ligar Desktop (WoL)
-                    url: http://manager:5001/wol/start
-                    icon: si:powerautomate
-                  - title: Ligar GPU Stack
-                    url: http://manager-1:5000/gpu/start
-                    icon: si:nvidia
-                  - title: Desligar GPU Stack
-                    url: http://manager-1:5000/gpu/stop
-                    icon: si:docker
-                  - title: Desligar Desktop
-                    url: http://manager-1:5000/desktop/stop
-                    icon: si:powerbi
-
-      - size: small
-        widgets:
-          - type: calendar
-
-          - type: markets
-            title: Mercados
-            markets:
-              - symbol: BTC-USD
-                name: Bitcoin
-              - symbol: ETH-USD
-                name: Ethereum
-              - symbol: USDBRL=X
-                name: Dólar / Real
-              - symbol: ^BVSP
-                name: Ibovespa
-              - symbol: ^GSPC
-                name: S&P 500
 
   # ===========================================================================
   # Página 2: Finanças — controle financeiro e mercados
