@@ -32,6 +32,13 @@ pages:
             units: metric
             hour-format: 24h
 
+          - type: reddit
+            title: r/technology
+            subreddit: technology
+            show-thumbnails: false
+            limit: 5
+            collapse-after: 3
+
       - size: full
         widgets:
           - type: bookmarks
