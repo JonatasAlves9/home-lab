@@ -52,9 +52,12 @@ pages:
               - title: Duplicati
                 url: http://manager:8200
                 icon: si:duplicati
+              - title: Firefly III
+                url: http://manager:8085
+                icon: si:fireflyiii
               - title: Open Health
                 url: http://manager:3003
-                icon: si:applehealth
+                icon: url:http://manager:3003/favicon.ico
               - title: Gitea
                 url: http://manager:3001
                 icon: si:gitea
@@ -73,44 +76,6 @@ pages:
 
       - size: full
         widgets:
-          - type: rss
-            title: Tech News
-            limit: 20
-            collapse-after: 5
-            feeds:
-              - url: https://feeds.arstechnica.com/arstechnica/technology-lab
-                title: Ars Technica
-              - url: https://www.theverge.com/rss/index.xml
-                title: The Verge
-              - url: https://www.wired.com/feed/rss
-                title: Wired
-              - url: https://feeds.feedburner.com/TechCrunch
-                title: TechCrunch
-
-          - type: hacker-news
-
-          - type: lobsters
-            limit: 15
-            collapse-after: 5
-
-      - size: small
-        widgets:
-          - type: calendar
-
-          - type: markets
-            title: Mercados
-            markets:
-              - symbol: BTC-USD
-                name: Bitcoin
-              - symbol: ETH-USD
-                name: Ethereum
-              - symbol: USDBRL=X
-                name: Dólar / Real
-              - symbol: ^BVSP
-                name: Ibovespa
-              - symbol: ^GSPC
-                name: S&P 500
-
           - type: bookmarks
             title: Acesso Rápido
             groups:
@@ -124,7 +89,6 @@ pages:
                     icon: si:gitea
                   - title: Vaultwarden
                     url: https://manager.tailca8f4.ts.net
-                    check-url: http://manager:8081
                     icon: si:bitwarden
                   - title: Pi-hole
                     url: http://manager:8082/admin
@@ -134,13 +98,18 @@ pages:
                     icon: si:duplicati
                   - title: Open Health
                     url: http://manager:3003
-                    icon: si:applehealth
+                    icon: url:http://manager:3003/favicon.ico
                   - title: FreshRSS
                     url: http://manager:8083
                     icon: si:freshrss
                   - title: Uptime Kuma
                     url: http://manager:3002
                     icon: si:uptimekuma
+              - title: Finanças
+                links:
+                  - title: Firefly III
+                    url: http://manager:8085
+                    icon: si:fireflyiii
               - title: Desktop
                 links:
                   - title: Jellyfin
@@ -207,8 +176,96 @@ pages:
                     url: http://manager-1:5000/desktop/stop
                     icon: si:powerbi
 
+      - size: small
+        widgets:
+          - type: calendar
+
+          - type: markets
+            title: Mercados
+            markets:
+              - symbol: BTC-USD
+                name: Bitcoin
+              - symbol: ETH-USD
+                name: Ethereum
+              - symbol: USDBRL=X
+                name: Dólar / Real
+              - symbol: ^BVSP
+                name: Ibovespa
+              - symbol: ^GSPC
+                name: S&P 500
+
   # ===========================================================================
-  # Página 2: Mídia — vídeos, streams e redes sociais
+  # Página 2: Finanças — controle financeiro e mercados
+  # ===========================================================================
+  - name: Finanças
+    columns:
+      - size: small
+        widgets:
+          - type: calendar
+
+          - type: bookmarks
+            title: Ferramentas Financeiras
+            groups:
+              - title: Gestão
+                links:
+                  - title: Firefly III
+                    url: http://manager:8085
+                    icon: si:fireflyiii
+
+      - size: full
+        widgets:
+          - type: markets
+            title: Criptomoedas
+            markets:
+              - symbol: BTC-USD
+                name: Bitcoin
+              - symbol: ETH-USD
+                name: Ethereum
+              - symbol: BNB-USD
+                name: BNB
+              - symbol: SOL-USD
+                name: Solana
+
+          - type: markets
+            title: Ações & Índices
+            markets:
+              - symbol: USDBRL=X
+                name: Dólar / Real
+              - symbol: EURBRL=X
+                name: Euro / Real
+              - symbol: ^BVSP
+                name: Ibovespa
+              - symbol: ^GSPC
+                name: S&P 500
+              - symbol: ^IXIC
+                name: Nasdaq
+              - symbol: ^DJI
+                name: Dow Jones
+
+          - type: rss
+            title: Finanças & Economia
+            limit: 15
+            collapse-after: 5
+            feeds:
+              - url: https://feeds.feedburner.com/BlogdoAkita
+                title: Blog do Akita
+              - url: https://www.investing.com/rss/news_25.rss
+                title: Investing.com BR
+
+      - size: small
+        widgets:
+          - type: markets
+            title: Commodities
+            markets:
+              - symbol: GC=F
+                name: Ouro
+              - symbol: SI=F
+                name: Prata
+              - symbol: CL=F
+                name: Petróleo WTI
+
+  # ===========================================================================
+  # Página 3: Mídia — vídeos, streams, feeds e notícias
   # ===========================================================================
   - name: Mídia
     columns:
@@ -229,6 +286,22 @@ pages:
       - size: full
         widgets:
           - type: rss
+            title: Tech News
+            limit: 20
+            collapse-after: 5
+            feeds:
+              - url: https://feeds.arstechnica.com/arstechnica/technology-lab
+                title: Ars Technica
+              - url: https://www.theverge.com/rss/index.xml
+                title: The Verge
+              - url: https://www.wired.com/feed/rss
+                title: Wired
+              - url: https://feeds.feedburner.com/TechCrunch
+                title: TechCrunch
+
+          - type: hacker-news
+
+          - type: rss
             title: Dev & Programação
             limit: 20
             collapse-after: 5
@@ -237,10 +310,6 @@ pages:
                 title: Akita On Rails
               - url: https://dev.to/feed
                 title: DEV.to
-              - url: https://feeds.arstechnica.com/arstechnica/technology-lab
-                title: Ars Technica
-              - url: https://www.theverge.com/rss/index.xml
-                title: The Verge
               - url: https://imasters.com.br/feed
                 title: iMasters
 
@@ -275,7 +344,7 @@ pages:
             collapse-after: 5
 
   # ===========================================================================
-  # Página 3: Dev — GitHub, releases e feeds técnicos
+  # Página 4: Dev — GitHub, releases e feeds técnicos
   # ===========================================================================
   - name: Dev
     columns:
@@ -293,6 +362,7 @@ pages:
               - dani-garcia/vaultwarden
               - glanceapp/glance
               - ajnart/homarr
+              - firefly-iii/firefly-iii
 
           - type: repository
             repository: glanceapp/glance
