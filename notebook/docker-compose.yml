@@ -459,8 +459,8 @@ services:
       SITE_ADDRESS: ":80"
       BUCKET_NAME: uploads
       FILE_SIZE_LIMIT: "5242880"
-      CERT_EMAIL: ""
-      CERT_ACME_CA: ""
+      CERT_EMAIL: "noop@localhost"
+      CERT_ACME_CA: "https://acme-v02.api.letsencrypt.org/directory"
       CERT_ACME_DNS: ""
     depends_on:
       - plane-web
