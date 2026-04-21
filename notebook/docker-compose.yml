@@ -391,7 +391,7 @@ services:
     image: makeplane/plane-frontend:latest
     container_name: plane-frontend
     restart: unless-stopped
-    command: node server.js
+    command: next start
     depends_on:
       - plane-backend
     ports:
