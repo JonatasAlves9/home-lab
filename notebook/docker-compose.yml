@@ -351,6 +351,7 @@ services:
     image: makeplane/plane-backend:latest
     container_name: plane-backend
     restart: unless-stopped
+    command: gunicorn --workers ${GUNICORN_WORKERS:-2} --bind 0.0.0.0:8000 plane.wsgi:application
     depends_on:
       plane-db:
         condition: service_healthy
