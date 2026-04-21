@@ -456,10 +456,12 @@ services:
     ports:
       - "8086:80"
     environment:
-      APP_DOMAIN: "${NOTEBOOK_IP}:8086"
+      SITE_ADDRESS: ":80"
       BUCKET_NAME: uploads
       FILE_SIZE_LIMIT: "5242880"
-      LISTEN_HTTP_PORT: "80"
+      CERT_EMAIL: ""
+      CERT_ACME_CA: ""
+      CERT_ACME_DNS: ""
     depends_on:
       - plane-web
       - plane-api
