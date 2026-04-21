@@ -24,6 +24,7 @@ Repositório de configuração completa para um home lab de dois nós com Docker
   │  • Pi-hole        │ │  • n8n (automação de fluxos)            │
   │  • Uptime Kuma    │ │  • GPU Stack (Ollama + Open WebUI)      │
   │  • FreshRSS       │ │                                          │
+  │  • Plane          │ │                                          │
   │  • Tailscale      │ │                                          │
   └───────────────────┘ └──────────────────────────────────────────┘
 ```
@@ -123,6 +124,8 @@ Copie `desktop/.env.example` para `desktop/.env`. Os valores padrão (`PUID=1000
 | Pi-hole | 8082 | `http://notebook:8082` | Bloqueio de anúncios / DNS |
 | Uptime Kuma | 3002 | `http://notebook:3002` | Monitor de uptime |
 | FreshRSS | 8083 | `http://notebook:8083` | Leitor de RSS |
+| Firefly III | 8085 | `http://notebook:8085` | Gerenciador de finanças |
+| Plane | 8086 | `http://notebook:8086` | Gerenciador de projetos/issues |
 
 ### Desktop (sob demanda)
 

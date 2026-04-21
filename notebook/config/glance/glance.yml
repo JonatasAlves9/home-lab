@@ -97,7 +97,7 @@ pages:
                     icon: si:grafana
 
           - type: bookmarks
-            title: IA & Finanças
+            title: IA & Ferramentas
             groups:
               - links:
                   - title: Open WebUI
@@ -109,6 +109,9 @@ pages:
                   - title: Firefly III
                     url: http://manager:8085
                     icon: si:fireflyiii
+                  - title: Plane
+                    url: http://manager:8086
+                    icon: si:plane
 
           - type: bookmarks
             title: Internet
@@ -177,6 +180,9 @@ pages:
               - title: Firefly III
                 url: http://manager:8085
                 icon: si:fireflyiii
+              - title: Plane
+                url: http://manager:8086
+                icon: si:plane
               - title: Open Health
                 url: http://manager:3003
                 icon: url:http://manager:3003/favicon.ico
@@ -365,6 +371,7 @@ pages:
               - glanceapp/glance
               - ajnart/homarr
               - firefly-iii/firefly-iii
+              - makeplane/plane
 
           - type: repository
             repository: glanceapp/glance

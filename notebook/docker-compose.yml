@@ -311,6 +311,53 @@ services:
     volumes:
       - firefly_db:/var/lib/postgresql/data
 
+  # ---------------------------------------------------------------------------
+  # Plane — Gerenciador de projetos e issues (alternativa a Linear/Jira)
+  # Acesso: http://<ip>:8086
+  # Documentação: https://docs.plane.so/
+  # Registre na primeira execução com email/senha
+  # ---------------------------------------------------------------------------
+  plane-db:
+    image: postgres:16-alpine
+    container_name: plane-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: plane
+      POSTGRES_USER: plane
+      POSTGRES_PASSWORD: ${PLANE_DB_PASSWORD}
+    volumes:
+      - plane_db:/var/lib/postgresql/data
+
+  plane-redis:
+    image: redis:7-alpine
+    container_name: plane-redis
+    restart: unless-stopped
+    volumes:
+      - plane_redis:/data
+
+  plane:
+    image: makeplane/plane:latest
+    container_name: plane
+    restart: unless-stopped
+    depends_on:
+      - plane-db
+      - plane-redis
+    ports:
+      - "8086:80"
+    volumes:
+      - plane_data:/var/plane
+    environment:
+      DEBUG: "0"
+      ALLOWED_HOSTS: ${NOTEBOOK_IP},localhost,127.0.0.1
+      DATABASE_URL: postgresql://plane:${PLANE_DB_PASSWORD}@plane-db:5432/plane
+      REDIS_URL: redis://plane-redis:6379
+      SECRET_KEY: ${PLANE_SECRET_KEY}
+      SENTRY_DSN: ""
+      EMAIL_BACKEND: console
+      FRONTEND_URL: http://${NOTEBOOK_IP}:8086
+      CORS_ALLOWED_ORIGINS: http://${NOTEBOOK_IP}:8086,http://localhost:8086,http://127.0.0.1:8086
+      TZ: America/Recife
+
 # =============================================================================
 # Volumes nomeados — dados persistentes gerenciados pelo Docker
 # Para inspecionar: docker volume inspect <nome>
@@ -329,4 +376,7 @@ volumes:
   open_health_data:
   firefly_upload:
   firefly_db:
+  plane_db:
+  plane_redis:
+  plane_data:
 
