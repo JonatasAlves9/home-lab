@@ -362,15 +362,28 @@ services:
       - plane_upload:/var/plane
     environment:
       DEBUG: "0"
-      ALLOWED_HOSTS: ${NOTEBOOK_IP},localhost,127.0.0.1
-      DATABASE_URL: postgresql://plane:${PLANE_DB_PASSWORD}@plane-db:5432/plane
-      REDIS_URL: redis://plane-redis:6379/0
-      SECRET_KEY: ${PLANE_SECRET_KEY}
-      SENTRY_DSN: ""
-      EMAIL_BACKEND: console
-      FRONTEND_URL: http://${NOTEBOOK_IP}:8086
+      PYTHONUNBUFFERED: "1"
+      ALLOWED_HOSTS: "${NOTEBOOK_IP},localhost,127.0.0.1"
+      PGHOST: plane-db
+      PGDATABASE: plane
+      PGPORT: "5432"
+      POSTGRES_USER: plane
+      POSTGRES_PASSWORD: "${PLANE_DB_PASSWORD}"
+      REDIS_HOST: plane-redis
+      REDIS_PORT: "6379"
+      REDIS_URL: "redis://plane-redis:6379/0"
+      SECRET_KEY: "${PLANE_SECRET_KEY}"
+      WEB_URL: "http://${NOTEBOOK_IP}:8086"
+      FRONTEND_URL: "http://${NOTEBOOK_IP}:8086"
       CORS_ALLOWED_ORIGINS: "http://${NOTEBOOK_IP}:8086,http://localhost:8086,http://127.0.0.1:8086"
-      USE_MINIO: "false"
+      GUNICORN_WORKERS: "2"
+      USE_MINIO: "0"
+      EMAIL_BACKEND: console
+      SENTRY_DSN: ""
+      BUCKET_NAME: uploads
+      FILE_SIZE_LIMIT: "5242880"
+      API_KEY_RATE_LIMIT: "60/minute"
+      AMQP_URL: "amqp://guest:guest@localhost:5672//"
       TZ: America/Recife
 
   plane-frontend:
@@ -382,11 +395,13 @@ services:
     ports:
       - "8086:3000"
     environment:
-      NEXT_PUBLIC_API_URL: http://${NOTEBOOK_IP}:8000
+      NEXT_PUBLIC_API_URL: "http://${NOTEBOOK_IP}:8000"
       NEXT_PUBLIC_ENABLE_SENTRY: "0"
       NEXT_PUBLIC_ENABLE_SESSION_RECORDER: "0"
-      TZ: America/Recife
+      NEXT_PUBLIC_ENABLE_OAUTH: "0"
+      NEXT_PUBLIC_ENABLE_SIGNUP: "1"
       NODE_ENV: production
+      TZ: America/Recife
 
 # =============================================================================
 # Volumes nomeados — dados persistentes gerenciados pelo Docker
