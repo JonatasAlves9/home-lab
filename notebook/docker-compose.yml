@@ -316,17 +316,24 @@ services:
   # Acesso: http://<ip>:8086
   # Documentação: https://docs.plane.so/
   # Registre na primeira execução com email/senha
+  # AVISO: requer 4GB RAM mínimo, 8GB recomendado (stack pesado)
   # ---------------------------------------------------------------------------
   plane-db:
-    image: postgres:16-alpine
+    image: postgres:15-alpine
     container_name: plane-db
     restart: unless-stopped
     environment:
       POSTGRES_DB: plane
       POSTGRES_USER: plane
       POSTGRES_PASSWORD: ${PLANE_DB_PASSWORD}
+      POSTGRES_MAX_CONNECTIONS: 200
     volumes:
       - plane_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U plane"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   plane-redis:
     image: redis:7-alpine
@@ -334,29 +341,52 @@ services:
     restart: unless-stopped
     volumes:
       - plane_redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
-  plane:
-    image: makeplane/plane:latest
-    container_name: plane
+  plane-backend:
+    image: makeplane/plane-backend:latest
+    container_name: plane-backend
     restart: unless-stopped
     depends_on:
-      - plane-db
-      - plane-redis
+      plane-db:
+        condition: service_healthy
+      plane-redis:
+        condition: service_healthy
     ports:
-      - "8086:80"
+      - "8000:8000"
     volumes:
-      - plane_data:/var/plane
+      - plane_upload:/var/plane
     environment:
       DEBUG: "0"
       ALLOWED_HOSTS: ${NOTEBOOK_IP},localhost,127.0.0.1
       DATABASE_URL: postgresql://plane:${PLANE_DB_PASSWORD}@plane-db:5432/plane
-      REDIS_URL: redis://plane-redis:6379
+      REDIS_URL: redis://plane-redis:6379/0
       SECRET_KEY: ${PLANE_SECRET_KEY}
       SENTRY_DSN: ""
       EMAIL_BACKEND: console
       FRONTEND_URL: http://${NOTEBOOK_IP}:8086
-      CORS_ALLOWED_ORIGINS: http://${NOTEBOOK_IP}:8086,http://localhost:8086,http://127.0.0.1:8086
+      CORS_ALLOWED_ORIGINS: "http://${NOTEBOOK_IP}:8086,http://localhost:8086,http://127.0.0.1:8086"
+      USE_MINIO: "false"
       TZ: America/Recife
+
+  plane-frontend:
+    image: makeplane/plane-frontend:latest
+    container_name: plane-frontend
+    restart: unless-stopped
+    depends_on:
+      - plane-backend
+    ports:
+      - "8086:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: http://${NOTEBOOK_IP}:8000
+      NEXT_PUBLIC_ENABLE_SENTRY: "0"
+      NEXT_PUBLIC_ENABLE_SESSION_RECORDER: "0"
+      TZ: America/Recife
+      NODE_ENV: production
 
 # =============================================================================
 # Volumes nomeados — dados persistentes gerenciados pelo Docker
@@ -378,5 +408,5 @@ volumes:
   firefly_db:
   plane_db:
   plane_redis:
-  plane_data:
+  plane_upload:
 
