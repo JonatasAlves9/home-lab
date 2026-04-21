@@ -403,6 +403,10 @@ services:
       - plane_logs_api:/code/plane/logs
     environment:
       <<: *plane-backend-env
+    networks:
+      default:
+        aliases:
+          - api
 
   plane-worker:
     image: makeplane/plane-backend:stable
@@ -434,6 +438,10 @@ services:
     restart: unless-stopped
     depends_on:
       - plane-api
+    networks:
+      default:
+        aliases:
+          - web
 
   plane-space:
     image: makeplane/plane-space:stable
@@ -441,6 +449,10 @@ services:
     restart: unless-stopped
     depends_on:
       - plane-api
+    networks:
+      default:
+        aliases:
+          - space
 
   plane-admin:
     image: makeplane/plane-admin:stable
@@ -448,6 +460,10 @@ services:
     restart: unless-stopped
     depends_on:
       - plane-api
+    networks:
+      default:
+        aliases:
+          - admin
 
   plane-proxy:
     image: makeplane/plane-proxy:stable
