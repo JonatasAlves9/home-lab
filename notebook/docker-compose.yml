@@ -315,95 +315,156 @@ services:
   # Plane — Gerenciador de projetos e issues (alternativa a Linear/Jira)
   # Acesso: http://<ip>:8086
   # Documentação: https://docs.plane.so/
-  # Registre na primeira execução com email/senha
-  # AVISO: requer 4GB RAM mínimo, 8GB recomendado (stack pesado)
+  # AVISO: requer 4GB RAM mínimo, 8GB recomendado
   # ---------------------------------------------------------------------------
   plane-db:
-    image: postgres:15-alpine
+    image: postgres:15.7-alpine
     container_name: plane-db
     restart: unless-stopped
+    command: postgres -c 'max_connections=1000'
     environment:
       POSTGRES_DB: plane
       POSTGRES_USER: plane
       POSTGRES_PASSWORD: ${PLANE_DB_PASSWORD}
-      POSTGRES_MAX_CONNECTIONS: 200
+      PGDATA: /var/lib/postgresql/data
     volumes:
       - plane_db:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U plane"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
   plane-redis:
-    image: redis:7-alpine
+    image: valkey/valkey:7.2.11-alpine
     container_name: plane-redis
     restart: unless-stopped
     volumes:
       - plane_redis:/data
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
-  plane-backend:
-    image: makeplane/plane-backend:latest
-    container_name: plane-backend
+  plane-mq:
+    image: rabbitmq:3.13.6-management-alpine
+    container_name: plane-mq
     restart: unless-stopped
-    command: gunicorn --workers ${GUNICORN_WORKERS:-2} --bind 0.0.0.0:8000 plane.wsgi:application
-    depends_on:
-      plane-db:
-        condition: service_healthy
-      plane-redis:
-        condition: service_healthy
-    ports:
-      - "8000:8000"
-    volumes:
-      - plane_upload:/var/plane
     environment:
+      RABBITMQ_DEFAULT_USER: plane
+      RABBITMQ_DEFAULT_PASS: ${PLANE_MQ_PASSWORD}
+      RABBITMQ_DEFAULT_VHOST: plane
+    volumes:
+      - plane_mq:/var/lib/rabbitmq
+
+  plane-minio:
+    image: minio/minio:latest
+    container_name: plane-minio
+    restart: unless-stopped
+    command: server /export --console-address ":9090"
+    environment:
+      MINIO_ROOT_USER: ${PLANE_MINIO_USER:-plane-minio}
+      MINIO_ROOT_PASSWORD: ${PLANE_MINIO_PASSWORD}
+    volumes:
+      - plane_uploads:/export
+
+  plane-migrator:
+    image: makeplane/plane-backend:stable
+    container_name: plane-migrator
+    restart: on-failure
+    command: ./bin/docker-entrypoint-migrator.sh
+    depends_on:
+      - plane-db
+      - plane-redis
+    environment: &plane-backend-env
+      WEB_URL: "http://${NOTEBOOK_IP}:8086"
       DEBUG: "0"
-      PYTHONUNBUFFERED: "1"
-      ALLOWED_HOSTS: "${NOTEBOOK_IP},localhost,127.0.0.1"
+      SECRET_KEY: "${PLANE_SECRET_KEY}"
+      DATABASE_URL: "postgresql://plane:${PLANE_DB_PASSWORD}@plane-db/plane"
       PGHOST: plane-db
       PGDATABASE: plane
-      PGPORT: "5432"
       POSTGRES_USER: plane
       POSTGRES_PASSWORD: "${PLANE_DB_PASSWORD}"
+      REDIS_URL: "redis://plane-redis:6379/"
       REDIS_HOST: plane-redis
-      REDIS_PORT: "6379"
-      REDIS_URL: "redis://plane-redis:6379/0"
-      SECRET_KEY: "${PLANE_SECRET_KEY}"
-      WEB_URL: "http://${NOTEBOOK_IP}:8086"
-      FRONTEND_URL: "http://${NOTEBOOK_IP}:8086"
-      CORS_ALLOWED_ORIGINS: "http://${NOTEBOOK_IP}:8086,http://localhost:8086,http://127.0.0.1:8086"
+      AMQP_URL: "amqp://plane:${PLANE_MQ_PASSWORD}@plane-mq:5672/plane"
+      USE_MINIO: "1"
+      AWS_ACCESS_KEY_ID: "${PLANE_MINIO_USER:-plane-minio}"
+      AWS_SECRET_ACCESS_KEY: "${PLANE_MINIO_PASSWORD}"
+      AWS_S3_ENDPOINT_URL: "http://plane-minio:9000"
+      AWS_S3_BUCKET_NAME: uploads
+      MINIO_ENDPOINT_SSL: "0"
+      CORS_ALLOWED_ORIGINS: "http://${NOTEBOOK_IP}:8086"
       GUNICORN_WORKERS: "2"
-      USE_MINIO: "0"
-      EMAIL_BACKEND: console
-      SENTRY_DSN: ""
+      FILE_SIZE_LIMIT: "5242880"
+
+  plane-api:
+    image: makeplane/plane-backend:stable
+    container_name: plane-api
+    restart: unless-stopped
+    command: ./bin/docker-entrypoint-api.sh
+    depends_on:
+      - plane-db
+      - plane-redis
+      - plane-mq
+      - plane-migrator
+    volumes:
+      - plane_logs_api:/code/plane/logs
+    environment:
+      <<: *plane-backend-env
+
+  plane-worker:
+    image: makeplane/plane-backend:stable
+    container_name: plane-worker
+    restart: unless-stopped
+    command: ./bin/docker-entrypoint-worker.sh
+    depends_on:
+      - plane-api
+    volumes:
+      - plane_logs_worker:/code/plane/logs
+    environment:
+      <<: *plane-backend-env
+
+  plane-beat:
+    image: makeplane/plane-backend:stable
+    container_name: plane-beat
+    restart: unless-stopped
+    command: ./bin/docker-entrypoint-beat.sh
+    depends_on:
+      - plane-api
+    volumes:
+      - plane_logs_beat:/code/plane/logs
+    environment:
+      <<: *plane-backend-env
+
+  plane-web:
+    image: makeplane/plane-frontend:stable
+    container_name: plane-web
+    restart: unless-stopped
+    depends_on:
+      - plane-api
+
+  plane-space:
+    image: makeplane/plane-space:stable
+    container_name: plane-space
+    restart: unless-stopped
+    depends_on:
+      - plane-api
+
+  plane-admin:
+    image: makeplane/plane-admin:stable
+    container_name: plane-admin
+    restart: unless-stopped
+    depends_on:
+      - plane-api
+
+  plane-proxy:
+    image: makeplane/plane-proxy:stable
+    container_name: plane-proxy
+    restart: unless-stopped
+    ports:
+      - "8086:80"
+    environment:
+      APP_DOMAIN: "${NOTEBOOK_IP}:8086"
       BUCKET_NAME: uploads
       FILE_SIZE_LIMIT: "5242880"
-      API_KEY_RATE_LIMIT: "60/minute"
-      AMQP_URL: "amqp://guest:guest@localhost:5672//"
-      TZ: America/Recife
-
-  plane-frontend:
-    image: makeplane/plane-frontend:latest
-    container_name: plane-frontend
-    restart: unless-stopped
-    command: npm start
+      LISTEN_HTTP_PORT: "80"
     depends_on:
-      - plane-backend
-    ports:
-      - "8086:3000"
-    environment:
-      NEXT_PUBLIC_API_URL: "http://${NOTEBOOK_IP}:8000"
-      NEXT_PUBLIC_ENABLE_SENTRY: "0"
-      NEXT_PUBLIC_ENABLE_SESSION_RECORDER: "0"
-      NEXT_PUBLIC_ENABLE_OAUTH: "0"
-      NEXT_PUBLIC_ENABLE_SIGNUP: "1"
-      NODE_ENV: production
-      TZ: America/Recife
+      - plane-web
+      - plane-api
+      - plane-space
+      - plane-admin
 
 # =============================================================================
 # Volumes nomeados — dados persistentes gerenciados pelo Docker
@@ -425,5 +486,9 @@ volumes:
   firefly_db:
   plane_db:
   plane_redis:
-  plane_upload:
+  plane_mq:
+  plane_uploads:
+  plane_logs_api:
+  plane_logs_worker:
+  plane_logs_beat:
 
